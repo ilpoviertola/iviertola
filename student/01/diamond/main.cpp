@@ -12,4 +12,5 @@ int main()
     cout << "    *   *    ";
     cout << "      *      ";
 
+
 }
