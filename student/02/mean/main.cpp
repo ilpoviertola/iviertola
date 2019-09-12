@@ -9,7 +9,7 @@ int main()
     std::cin >> nroAmount;
     if(nroAmount > 0){
         int i = 1;
-        int sum = 0;
+        double sum = 0;
         while(i <= nroAmount){
             int input = 0;
             std::cout << "Input " << i << ". number: ";
