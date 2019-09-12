@@ -17,6 +17,6 @@ int main()
     } else if(r != nro){
         cout << "Error! The cube of " << nro << " is not " << p << endl;
     } else{
-        cout << "The cube of " << nro << " is " << p << endl;
+        cout << "The cube of " << nro << " is " << p << "." << endl;
     }
 }
