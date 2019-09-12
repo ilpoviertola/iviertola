@@ -17,7 +17,7 @@ int main()
             sum = input + sum;
             ++i;
         }
-        std::cout << "Mean value of the given numbers is " << sum << std::endl;
+        std::cout << "Mean value of the given numbers is " << sum / nroAmount << std::endl;
     }
     else{
         std::cout << "Cannot count mean value from " << nroAmount << " numbers" << std::endl;
