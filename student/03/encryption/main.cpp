@@ -36,7 +36,7 @@ void encrypt(string key, string& text){
 
 
 
-    for(int p = 0;p < length; ++p){
+    for(long unsigned int p = 0;p < length; ++p){
         for(int i = 0; i < 26; ++i){
             char keyLetter = key[i];
             char original = 97 + i;
