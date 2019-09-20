@@ -4,31 +4,55 @@
 
 using namespace std;
 
-int check(string key)
+void check(string key)
 {
     string::size_type length;
     length = key.length();
-    int const summa = 32764;
 
     if(length != 26){
         cout << "Error! The encryption key must contain 26 characters." << endl;
-        return EXIT_FAILURE;}
+        exit(EXIT_FAILURE);}
 
     for(int i = 0;i < 26;i++){
         char letter;
         letter = key.at(i);
-        if(islower(letter)k){
+        if(islower(letter)){
            continue;}
         else{
             cout << "Error! The encryption key must contain only lower case characters." << endl;
-            return EXIT_FAILURE;}}
+            exit(EXIT_FAILURE);}}
 
     for(int i = 97;i <= 122; ++i){
         length = key.find((char)i);
         if(length == string::npos){
             cout << "Error! The encryption key must contain all alphabets a-z." << endl;
-            return EXIT_FAILURE;}}
+            exit(EXIT_FAILURE);}}
 }
+
+void encrypt(string key, string& text){
+    string::size_type length;
+    length = text.length();
+    string copy = text;
+
+
+
+    for(int p = 0;p < length; ++p){
+        for(int i = 0; i < 26; ++i){
+            char keyLetter = key[i];
+            char original = 97 + i;
+            cout << original << " = " << keyLetter << endl;
+            string keyString;
+            string originalString;
+            keyString.assign(1, keyLetter);
+            originalString.assign(1, original);
+            if(original == text[p]){
+                copy.replace(p, 1, keyString);}
+
+        }
+    }
+    cout << "Encrypted text: " << copy << endl;
+}
+
 
 int main()
 {
@@ -36,4 +60,10 @@ int main()
     string key;
     getline(cin, key);
     check(key);
+
+    cout << "Enter the text to be encrypted: ";
+    string text;
+    getline(cin, text);
+    encrypt(key, text);
+
 }
