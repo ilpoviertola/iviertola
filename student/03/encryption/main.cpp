@@ -40,7 +40,6 @@ void encrypt(string key, string& text){
         for(int i = 0; i < 26; ++i){
             char keyLetter = key[i];
             char original = 97 + i;
-            cout << original << " = " << keyLetter << endl;
             string keyString;
             string originalString;
             keyString.assign(1, keyLetter);
