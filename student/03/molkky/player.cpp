@@ -12,6 +12,10 @@ std::string Player::get_name() const{
 
 void Player::add_points(int pts){
     points_ = points_ + pts;
+    if(points_ > 50){
+        std::cout << name_ << " gets penalty points!" << std::endl;
+        points_ = 25;
+    }
 }
 
 int Player::get_points() const{
@@ -21,10 +25,6 @@ int Player::get_points() const{
 bool Player::has_won(){
     if(points_ == 50){
         return true;
-    }else if(points_ > 50){
-        std::cout << name_ << " gets penalty points!" << std::endl;
-        points_ = 25;
-        return false;
     }else{
         return false;
     }
