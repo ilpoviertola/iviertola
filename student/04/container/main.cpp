@@ -2,65 +2,115 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <cmath>
 
 
 void read_integers(std::vector< int >& ints, int count)
+
 {
+
     int new_integer = 0;
+
     for(int i = 0; i < count; ++i)
+
     {
+
         std::cin >> new_integer;
+
         ints.push_back(new_integer);
-    } 
+
+        // TODO: Implement your solution here
+
+    }
+
 }
 
-bool same_values(std::vector< int >& ints)
-{
-    bool error;
-    for(long unsigned int i = 0;i < ints.size() - 1;++i){
-        if(ints.at(i) != ints.at(i+1)){
-            error = true;
-            break;
+
+
+// TODO: Implement your solution here
+
+bool same_values(std::vector< int >& ints){
+
+    int counter = 0;
+
+    for (long unsigned int i =1; i < ints.size(); ++i){
+
+        if (ints.at(i) == ints.at(i-1)){
+
+            ++counter;
+
         }
+
     }
-    if(error){return false;}else{return true;}
+
+    if ( counter != 0){
+
+        return true;
+
+    } else{return false;}
+
 }
 
-bool is_ordered_non_strict_ascending(std::vector< int >& ints)
-{
-    bool error;
-    for(long unsigned int i = 0;i < ints.size() - 1;++i){
-        if(ints.at(i) > ints.at(i+1)){
-            error = true;
-            break;
-        }
+bool is_ordered_non_strict_ascending(std::vector< int >& ints){
+
+    if (std::is_sorted(ints.begin(), ints.end())){
+
+        return true;
+
     }
-    if(error){return false;}else{return true;}
+
+    else {return false;}
+
 }
 
-bool is_arithmetic_series(std::vector< int >& ints)
-{
-    bool error;
-    for(long unsigned int i = 0;i < ints.size() - 2;++i){
-        if(ints.at(i) - ints.at(i+1) != ints.at(i+1) - ints.at(i+2)){
-            error = true;
-            break;
-        }
+
+
+bool is_arithmetic_series (std::vector< int >& ints){
+
+    long unsigned int sum = 0;
+
+    for ( int vector_elem : ints){
+
+        sum += vector_elem;
+
     }
-    if(error){return false;}else{return true;}
+
+    if (sum == ((ints.size()*(ints.at(0)+ints.at(ints.size()-1)))/2)){
+
+        return true;}
+
+    else {return false;}
+
 }
 
-bool is_geometric_series(std::vector< int >& ints)
-{
-    bool error;
-    for(long unsigned int i = 0;i < ints.size() - 2;++i){
-        if(ints.at(i) / ints.at(i+1) != ints.at(i+1) / ints.at(i+2)){
-            error = true;
-            break;
+
+
+bool is_geometric_series (std::vector< int >& ints){
+
+    int q = ints.at(1)/ints.at(0);
+
+    int counter = 0;
+
+    for ( unsigned long int i = 1; i < ints.size(); ++i){
+
+        if (ints.at(i) != ints.front() * pow(q, i)){
+
+            ++counter;
+
         }
+
     }
-    if(error){return false;}else{return true;}
+
+    if (counter != 0){
+
+        return false;
+
+    } else{return true;}
+
 }
+
+
+
 
 int main()
 {

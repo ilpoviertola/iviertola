@@ -209,6 +209,7 @@ DIST          = /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/spec_pre.prf
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/spec_post.prf \
+		../container/.qmake.stash \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/default_pre.prf \
@@ -391,6 +392,7 @@ Makefile: ../container/container.pro /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/qt_config.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/linux-g++/qmake.conf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/exclusive_builds.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/toolchain.prf \
 		/opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/default_pre.prf \
@@ -563,6 +565,7 @@ Makefile: ../container/container.pro /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/qt_config.prf:
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/linux-g++/qmake.conf:
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/exclusive_builds.prf:
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/toolchain.prf:
 /opt/lintula/Qt/5.9.6/5.9.6/gcc_64/mkspecs/features/default_pre.prf:
