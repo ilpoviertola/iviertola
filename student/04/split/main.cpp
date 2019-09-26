@@ -28,20 +28,21 @@ std::vector<std::string> split(std::string line, char separator, bool no_empty=f
             }
     }}
     else{
-        while(line.length() > 0){
+        while(true){
             spot = line.find(separator);
             if(spot == std::string::npos){
                 parts.push_back(line);
                 line.erase(0);
+                break;
             }
             else{
                 splittedPart = line.substr(0, spot);
                 //std::cout << splittedPart << std::endl;
-                line.erase(0, spot +1);
+                line.erase(0, spot + 1);
                 //std::cout << line << std::endl;
                 parts.push_back(splittedPart);
             }
-    }
+        }
     }
     return parts;
 
