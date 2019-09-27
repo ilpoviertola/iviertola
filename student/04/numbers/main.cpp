@@ -98,6 +98,25 @@ void print(std::vector<std::vector<NumberTile>> &board){
     std::cout << std::string(PRINT_WIDTH * SIZE + 1, '-') << std::endl;
 }
 
+// Asks for user input.
+int userInput(bool askGoal = false){
+    if(askGoal){
+        int goal;
+        std::cout << "Give a goal value or an empty line: ";
+        std::cin >> goal;
+        return goal;
+    } else{
+        char direction;
+        std::cout << "Dir> ";
+        std::cin >> direction;
+        return direction;
+    }
+}
+
+void play(std::vector<std::vector<NumberTile>> &board, int goal = DEFAULT_GOAL){
+
+}
+
 int main()
 {
     // Declare the board and randomengine.
@@ -107,5 +126,7 @@ int main()
     std::uniform_int_distribution<int> distr(0, SIZE - 1);
 
     initBoard(board, randomEng, distr);
+    int goal = userInput(true);
     print(board);
+    play(board, goal);
 }

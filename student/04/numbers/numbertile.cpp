@@ -37,7 +37,6 @@ bool NumberTile::setValue(int value)
 {
     value_ += value;
 
-
     return true;
 }
 
