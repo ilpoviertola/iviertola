@@ -31,6 +31,7 @@ const int SIZE = 4;
 const int NEW_VALUE = 2;
 const int PRINT_WIDTH = 5;
 const int DEFAULT_GOAL = 2048;
+const std::vector<char> INPUTS = {'a', 's', 'd', 'w', 'q'};
 
 
 // Adds a single new value to board using rEng and distr for random positioning.
@@ -98,23 +99,31 @@ void print(std::vector<std::vector<NumberTile>> &board){
     std::cout << std::string(PRINT_WIDTH * SIZE + 1, '-') << std::endl;
 }
 
-// Asks for user input.
-int userInput(bool askGoal = false){
-    if(askGoal){
-        int goal;
-        std::cout << "Give a goal value or an empty line: ";
-        std::cin >> goal;
-        return goal;
-    } else{
-        char direction;
+
+// Checks if the user given input is rigth and acceptable. Continues asking until the
+// right input is given.
+char userInput(){
+
+    bool correctInput = false;
+
+    while(!correctInput){
+        char userInput;
         std::cout << "Dir> ";
-        std::cin >> direction;
-        return direction;
+        std::cin >> userInput;
+        for( auto x : INPUTS){
+            if(x == userInput){
+                correctInput = true;
+                return userInput;
+                break;
+            }
+        }
+        std::cout << "Error: unknown command." << std::endl;
     }
 }
 
-void play(std::vector<std::vector<NumberTile>> &board, int goal = DEFAULT_GOAL){
-
+//Asks user for the goal wanted to set.
+int askGoal(){
+    return DEFAULT_GOAL;
 }
 
 int main()
@@ -126,7 +135,24 @@ int main()
     std::uniform_int_distribution<int> distr(0, SIZE - 1);
 
     initBoard(board, randomEng, distr);
-    int goal = userInput(true);
+    int goal = askGoal();
     print(board);
-    play(board, goal);
+
+    //Loop goes on and on until the goal is reached or user gives 'q' as input.
+    while(true){
+        //Input (direction) is being asked from the user.
+        char direction = userInput();
+        if(direction == 'q'){
+            break;}
+        //Move tiles to wanted direction. Success stands for accomplished moves.
+        bool success = board.at(0).at(0).moveTile(direction, SIZE);
+        //Adds new value to a empty tile.
+        if(success){
+            newValue(board, randomEng, distr);}
+        //If new tile can't be added player has lost the game.
+        else {
+            std::cout << "Can't add new tile, you lost!" << std::endl;
+            break;}
+        print(board);
+    }
 }

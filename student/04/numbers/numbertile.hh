@@ -10,6 +10,8 @@
 #define NUMBERTILE_HH
 #include <utility>
 #include <vector>
+#include <string>
+#include <iostream>
 
 class NumberTile
 {
@@ -32,12 +34,30 @@ public:
     // Tries to set a new value to the tile. Returns true if successful, false
     // if the tile already contains some value.
     bool setValue(int value);
+
+    // Moves the number to user given direction, if possible.
+    int moveTile(char direction, const int SIZE);
+
+    int getValue();
+
+    std::string getCoords();
+
+    int addValue(int value, char direction);
+
+    void zeroValue();
+
+    bool hasWon(int goal);
+
 private:
     // Private part contains variables and methods that shouldn't be usable
     // outside the class.
 
     // Value of the tile.
     int value_;
+
+    std::pair<int, int> coords_;
+
+    std::vector<std::vector<NumberTile>>* board_;
 };
 
 #endif // NUMBERTILE_HH
