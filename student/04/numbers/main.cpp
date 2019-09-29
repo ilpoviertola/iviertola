@@ -123,7 +123,28 @@ char userInput(){
 
 //Asks user for the goal wanted to set.
 int askGoal(){
-    return DEFAULT_GOAL;
+    int goal;
+    std::cout << "Give a goal value or an empty line: ";
+    std::string goalStr = "";
+    getline(std::cin, goalStr);
+    if(goalStr == ""){
+        goal = DEFAULT_GOAL;
+    } else{
+        goal = stoi(goalStr);
+    }
+    return goal;
+}
+
+//Checks every tile on board if there's any wins.
+bool hasWon(std::vector<std::vector<NumberTile>> &board, int goal){
+    for( auto y : board ){
+        for( auto x : y){
+            if(x.hasWon(goal)){
+                std::cout << "You reached the goal value of " << goal << "!" << std::endl;
+                return true;
+            }
+        }
+    }
 }
 
 int main()
@@ -139,7 +160,7 @@ int main()
     print(board);
 
     //Loop goes on and on until the goal is reached or user gives 'q' as input.
-    while(true){
+    while(!hasWon(board, goal)){
         //Input (direction) is being asked from the user.
         char direction = userInput();
         if(direction == 'q'){
@@ -156,3 +177,4 @@ int main()
         print(board);
     }
 }
+

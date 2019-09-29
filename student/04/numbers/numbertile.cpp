@@ -145,5 +145,14 @@ int NumberTile::moveTile(char direction, const int SIZE)
     return moves;
 }
 
-
+//Checks if user has won the game.
+bool NumberTile::hasWon(int goal)
+{
+    if(value_ == goal){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
 
