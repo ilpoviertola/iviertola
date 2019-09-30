@@ -100,8 +100,8 @@ void print(std::vector<std::vector<NumberTile>> &board){
 }
 
 
-// Checks if the user given input is rigth and acceptable. Continues asking until
-// right input is given.
+// Checks if the user given input is rigth and acceptable. Continues asking
+// until right input is given.
 char userInput(){
 
     bool correctInput = false;
@@ -143,8 +143,6 @@ bool hasWon(std::vector<std::vector<NumberTile>> &board, int goal){
     for( auto y : board ){
         for( auto x : y){
             if(x.hasWon(goal)){
-                std::cout << "You reached the goal value of " << goal << "!" <<
-                             std::endl;
                 return true;
             }
         }
@@ -160,7 +158,8 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
     if(direction == 'a'){
         for( int y = 0 ; y < SIZE ; y++ ){
             for( int x = SIZE - 1 ; x > 0 ; x-- ){
-                // Adds the value of a tile in the right hand side to a tile on the left.
+                // Adds the value of a tile in the right hand side to a tile on
+                // the left if left tile's value is 0.
                 board.at(y).at(x - 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
             }
@@ -170,7 +169,8 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
     if( direction == 'd'){
         for( int y = 0 ; y < SIZE ; y++ ){
             for( int x = 0 ; x < SIZE - 1; x++ ){
-                // Adds the value of a tile in the left hand side to a tile on the right.
+                // Adds the value of a tile in the left hand side to a tile on
+                // the right if right tile's value is 0.
                 board.at(y).at(x + 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
             }
@@ -180,7 +180,8 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
     if(direction == 'w'){
         for( int x = 0 ; x < SIZE ; x++){
             for( int y = SIZE - 1 ; y > 0 ; y--){
-                // Adds the value of a tile underneath the another tile.
+                // Adds the value of a tile underneath the another tile if the
+                // tile's value on the bottom is zero.
                 board.at(y - 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
             }
@@ -190,7 +191,8 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
     if(direction == 's'){
         for( int x = 0; x < SIZE ; x++){
             for( int y = 0 ; y < SIZE - 1 ; y++){
-                // Adds the value of a tile underneath the another.
+                // Adds the value of a tile underneath the another if the
+                // tile's value on the top is 0.
                 board.at(y + 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
             }
@@ -203,52 +205,70 @@ int moveTile(std::vector<std::vector<NumberTile>> &board, char direction)
     int moves = 0;
 
     if( direction == 'a' ){
+        // Clears zeroes so tile's with value are next to each other before
+        // adding them together.
         for( int i = 0 ; i < SIZE ; ++i){
         clearZeros(board, direction);
         }
         for( int y = 0 ; y < SIZE ; ++y ){
             for( int x = 0 ; x < SIZE - 1 ; ++x){
-                moves = moves + board.at(y).at(x).addValue(board.at(y).at(x + 1).getValue(), direction);
+                // Adds the value of a tile in the right hand side
+                // to a tile on the left.
+                moves = moves + board.at(y).at(x).addValue(
+                            board.at(y).at(x + 1).getValue(), direction);
             }
         }
     }
 
     if( direction == 'd' ){
+        // Clears zeroes so tile's with value are next to each other before
+        // adding them together.
         for( int i = 0 ; i < SIZE ; ++i){
         clearZeros(board, direction);
         }
         for( int y = 0 ; y < SIZE ; ++y){
             for( int x = SIZE - 1 ; x > 0 ; --x){
-                moves = moves + board.at(y).at(x).addValue(board.at(y).at(x - 1).getValue(), direction);
+                 // Adds the value of a tile in the left hand side
+                // to a tile on the right.
+                moves = moves + board.at(y).at(x).addValue(
+                            board.at(y).at(x - 1).getValue(), direction);
             }
         }
     }
 
     if( direction == 'w'){
+        // Clears zeroes so tile's with value are next to each other before
+        // adding them together.
         for( int i = 0 ; i < SIZE ; ++i){
         clearZeros(board, direction);
         }
         for( int x = 0 ; x < SIZE ; ++x ){
             for( int y = 0 ; y < SIZE - 1 ; ++y ){
-                clearZeros(board, direction);
-                moves = moves + board.at(y).at(x).addValue(board.at(y + 1).at(x).getValue(), direction);
+                // Adds the value of a tile underneath the another tile.
+                moves = moves + board.at(y).at(x).addValue(
+                            board.at(y + 1).at(x).getValue(), direction);
             }
         }
     }
 
     if(direction == 's'){
+        // Clears zeroes so tile's with value are next to each other before
+        // adding them together.
         for( int i = 0 ; i < SIZE ; ++i){
         clearZeros(board, direction);
         }
         for( int x = 0 ; x < SIZE; ++x ){
             for( int y = SIZE - 1 ; y > 0 ; --y){
-                moves = moves + board.at(y).at(x).addValue(board.at(y - 1).at(x).getValue(), direction);
+                // Adds the value of a tile underneath the another.
+                moves = moves + board.at(y).at(x).addValue(
+                            board.at(y - 1).at(x).getValue(), direction);
             }
         }
     }
     return 0;
 }
 
+// Checks if there's any blank tiles left.
 bool spaceOnBoard(std::vector<std::vector<NumberTile>> &board){
 
     int spotsOnBoard = 0;
@@ -284,14 +304,20 @@ int main()
         //Move tiles to wanted direction. Success stands for accomplished moves.
         moveTile(board, direction);
         clearZeros(board, direction);
-        //Adds new value to a empty tile.
-        if(spaceOnBoard(board)){
-            newValue(board, randomEng, distr);}
-        //If new tile can't be added player has lost the game.
-        else {
-            std::cout << "Can't add new tile, you lost!" << std::endl;
-            break;}
+        // If the user hasn't won the game, a new tile is added to the board.
+        if(!hasWon(board, goal)){
+            //Adds new value to a empty tile after checking for space on the board.
+            if(spaceOnBoard(board)){
+                newValue(board, randomEng, distr);
+            }
+            //If new tile can't be added player has lost the game.
+            else {
+                std::cout << "Can't add new tile, you lost!" << std::endl;
+                break;}
+        }
         print(board);
     }
+
+    std::cout << "You reached the goal value of " << goal << "!" << std::endl;
 }
 
