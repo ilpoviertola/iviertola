@@ -318,6 +318,8 @@ int main()
         print(board);
     }
 
-    std::cout << "You reached the goal value of " << goal << "!" << std::endl;
+    if(hasWon(board, goal)){
+        std::cout << "You reached the goal value of " << goal << "!" << std::endl;
+    }
 }
 
