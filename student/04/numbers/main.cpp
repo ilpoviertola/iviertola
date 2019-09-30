@@ -163,8 +163,6 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile in the right hand side to a tile on the left.
                 board.at(y).at(x - 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
-                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
-                board.at(y).at(x - 1).resetHasBeenMoved();
             }
         }
     }
@@ -175,8 +173,6 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile in the left hand side to a tile on the right.
                 board.at(y).at(x + 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
-                // Resets hasBeenMoved_ so the tiles can be moved on the next round.
-                board.at(y).at(x + 1).resetHasBeenMoved();
             }
         }
     }
@@ -187,8 +183,6 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile underneath the another tile.
                 board.at(y - 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
-                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
-                board.at(y - 1).at(x).resetHasBeenMoved();
             }
         }
     }
@@ -199,11 +193,74 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile underneath the another.
                 board.at(y + 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
-                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
-                board.at(y + 1).at(x).resetHasBeenMoved();
             }
         }
     }
+}
+
+int moveTile(std::vector<std::vector<NumberTile>> &board, char direction)
+{
+    int moves = 0;
+
+    if( direction == 'a' ){
+        for( int i = 0 ; i < SIZE ; ++i){
+        clearZeros(board, direction);
+        }
+        for( int y = 0 ; y < SIZE ; ++y ){
+            for( int x = 0 ; x < SIZE - 1 ; ++x){
+                moves = moves + board.at(y).at(x).addValue(board.at(y).at(x + 1).getValue(), direction);
+            }
+        }
+    }
+
+    if( direction == 'd' ){
+        for( int i = 0 ; i < SIZE ; ++i){
+        clearZeros(board, direction);
+        }
+        for( int y = 0 ; y < SIZE ; ++y){
+            for( int x = SIZE - 1 ; x > 0 ; --x){
+                moves = moves + board.at(y).at(x).addValue(board.at(y).at(x - 1).getValue(), direction);
+            }
+        }
+    }
+
+    if( direction == 'w'){
+        for( int i = 0 ; i < SIZE ; ++i){
+        clearZeros(board, direction);
+        }
+        for( int x = 0 ; x < SIZE ; ++x ){
+            for( int y = 0 ; y < SIZE - 1 ; ++y ){
+                clearZeros(board, direction);
+                moves = moves + board.at(y).at(x).addValue(board.at(y + 1).at(x).getValue(), direction);
+            }
+        }
+    }
+
+    if(direction == 's'){
+        for( int i = 0 ; i < SIZE ; ++i){
+        clearZeros(board, direction);
+        }
+        for( int x = 0 ; x < SIZE; ++x ){
+            for( int y = SIZE - 1 ; y > 0 ; --y){
+                moves = moves + board.at(y).at(x).addValue(board.at(y - 1).at(x).getValue(), direction);
+            }
+        }
+    }
+    return 0;
+}
+
+bool spaceOnBoard(std::vector<std::vector<NumberTile>> &board){
+
+    int spotsOnBoard = 0;
+
+    for( auto y : board ){
+        for( auto x : y ){
+            if(x.getValue() == 0){
+                ++spotsOnBoard;
+            }
+        }
+    }
+    return spotsOnBoard;
 }
 
 int main()
@@ -225,10 +282,10 @@ int main()
         if(direction == 'q'){
             break;}
         //Move tiles to wanted direction. Success stands for accomplished moves.
-        bool success = board.at(0).at(0).moveTile(direction, SIZE);
+        moveTile(board, direction);
+        clearZeros(board, direction);
         //Adds new value to a empty tile.
-        if(success){
-            clearZeros(board, direction);
+        if(spaceOnBoard(board)){
             newValue(board, randomEng, distr);}
         //If new tile can't be added player has lost the game.
         else {

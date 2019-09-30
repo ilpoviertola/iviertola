@@ -18,7 +18,7 @@ std::pair<int, int>operator +(std::pair<int, int> lhs, std::pair<int, int> rhs){
 NumberTile::NumberTile(int value,
                        std::pair<int, int> coords,
                        std::vector<std::vector<NumberTile> > *board)
-    : hasBeenMoved_(false), value_(value), coords_(coords), board_(board)
+    : value_(value), coords_(coords), board_(board)
 {
     // Students should write their own implementation here, if necessary.
 
@@ -53,21 +53,15 @@ int NumberTile::getValue()
 }
 
 //Adds value to the tile when tiles are being moved.
-int NumberTile::addValue(int value, char direction, bool hasBeenMoved)
+int NumberTile::addValue(int value, char direction)
 {
     // Amount of succesful moves when a direction is called.
     int moves = 0;
 
     // Move can be performed if tile value the tile is moving on is the same
     // as the value in the moving tile or zero.
-    if((value_ == value && hasBeenMoved == false) or (value_ == 0 && hasBeenMoved == false)){
+    if(value_ == value or value_ == 0 or value == 0){
 
-        // When the tile is being moved over a blank tile, the move doesn't count.
-        if(value_ == 0 or value == 0){
-            hasBeenMoved_ = false;
-        } else{
-            hasBeenMoved_ = true;
-        }
 
         // Adds value of the tile which was moved on an another, to the tile
         // the tile was moved on.
@@ -101,7 +95,7 @@ int NumberTile::addValue(int value, char direction, bool hasBeenMoved)
 // Clear the "extra" zeros afger moving tile.
 void NumberTile::clearZeros(int value, char direction)
 {
-    if(value_ == 0){
+    if(value_ == 0 or value == 0){
 
         // Adds value of the tile which was moved on an another, to the tile
         // the tile was moved on.
@@ -135,56 +129,6 @@ void NumberTile::zeroValue()
     value_ = 0;
 }
 
-// Moves tiles around the board.
-int NumberTile::moveTile(char direction, const int SIZE)
-{
-    //Amount of succesful moves of tiles
-    int moves = 0;
-
-    if(direction == 'a'){
-        for( int y = 0 ; y < SIZE ; y++ ){
-            for( int x = SIZE - 1 ; x > 0 ; x-- ){
-                // Adds the value of a tile in the right hand side to a tile on the left.
-                moves = moves + board_->at(y).at(x - 1)
-                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
-            }
-        }
-    }
-
-    if( direction == 'd'){
-        for( int y = 0 ; y < SIZE ; y++ ){
-            for( int x = 0 ; x < SIZE - 1; x++ ){
-                // Adds the value of a tile in the left hand side to a tile on the right.
-                moves = moves + board_->at(y).at(x + 1)
-                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
-            }
-        }
-    }
-
-    if(direction == 'w'){
-        for( int x = 0 ; x < SIZE ; x++){
-            for( int y = SIZE - 1 ; y > 0 ; y--){
-                // Adds the value of a tile underneath the another tile.
-                moves = moves + board_->at(y - 1).at(x)
-                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
-            }
-        }
-    }
-
-    if(direction == 's'){
-        for( int x = 0; x < SIZE ; x++){
-            for( int y = 0 ; y < SIZE - 1 ; y++){
-                // Adds the value of a tile underneath the another.
-                moves = moves + board_->at(y + 1).at(x)
-                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
-            }
-        }
-    }
-
-
-    return moves;
-}
-
 //Checks if user has won the game.
 bool NumberTile::hasWon(int goal)
 {
@@ -196,13 +140,4 @@ bool NumberTile::hasWon(int goal)
     }
 }
 
-void NumberTile::resetHasBeenMoved()
-{
-    hasBeenMoved_ = false;
-}
-
-bool NumberTile::getHasBeenMoved()
-{
-    return hasBeenMoved_;
-}
 
