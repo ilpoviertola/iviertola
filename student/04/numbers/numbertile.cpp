@@ -18,7 +18,7 @@ std::pair<int, int>operator +(std::pair<int, int> lhs, std::pair<int, int> rhs){
 NumberTile::NumberTile(int value,
                        std::pair<int, int> coords,
                        std::vector<std::vector<NumberTile> > *board)
-    : value_(value), coords_(coords), board_(board)
+    : hasBeenMoved_(false), value_(value), coords_(coords), board_(board)
 {
     // Students should write their own implementation here, if necessary.
 
@@ -53,18 +53,19 @@ int NumberTile::getValue()
 }
 
 //Adds value to the tile when tiles are being moved.
-int NumberTile::addValue(int value, char direction)
+int NumberTile::addValue(int value, char direction, bool hasBeenMoved)
 {
     // Amount of succesful moves when a direction is called.
     int moves = 0;
 
     // Move can be performed if tile value the tile is moving on is the same
     // as the value in the moving tile or zero.
-    if(value_ == value or value_ == 0){
+    if((value_ == value && hasBeenMoved == false) or (value_ == 0 && hasBeenMoved == false)){
 
         // Adds value of the tile which was moved on an another, to the tile
         // the tile was moved on.
         value_ += value;
+        hasBeenMoved_ = true;
 
         moves += 1;
 
@@ -139,7 +140,7 @@ int NumberTile::moveTile(char direction, const int SIZE)
             for( int x = SIZE - 1 ; x > 0 ; x-- ){
                 // Adds the value of a tile in the right hand side to a tile on the left.
                 moves = moves + board_->at(y).at(x - 1)
-                        .addValue(board_->at(y).at(x).getValue(), direction);
+                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
             }
         }
     }
@@ -149,7 +150,7 @@ int NumberTile::moveTile(char direction, const int SIZE)
             for( int x = 0 ; x < SIZE - 1; x++ ){
                 // Adds the value of a tile in the left hand side to a tile on the right.
                 moves = moves + board_->at(y).at(x + 1)
-                        .addValue(board_->at(y).at(x).getValue(), direction);
+                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
             }
         }
     }
@@ -159,7 +160,7 @@ int NumberTile::moveTile(char direction, const int SIZE)
             for( int y = SIZE - 1 ; y > 0 ; y--){
                 // Adds the value of a tile underneath the another tile.
                 moves = moves + board_->at(y - 1).at(x)
-                        .addValue(board_->at(y).at(x).getValue(), direction);
+                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
             }
         }
     }
@@ -169,7 +170,7 @@ int NumberTile::moveTile(char direction, const int SIZE)
             for( int y = 0 ; y < SIZE - 1 ; y++){
                 // Adds the value of a tile underneath the another.
                 moves = moves + board_->at(y + 1).at(x)
-                        .addValue(board_->at(y).at(x).getValue(), direction);
+                        .addValue(board_->at(y).at(x).getValue(), direction, board_->at(y).at(x).getHasBeenMoved());
             }
         }
     }
@@ -185,5 +186,15 @@ bool NumberTile::hasWon(int goal)
     else {
         return false;
     }
+}
+
+void NumberTile::resetHasBeenMoved()
+{
+    hasBeenMoved_ = false;
+}
+
+bool NumberTile::getHasBeenMoved()
+{
+    return hasBeenMoved_;
 }
 

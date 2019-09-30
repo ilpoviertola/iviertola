@@ -42,7 +42,7 @@ public:
     int getValue();
 
     //Adds value of another tile to another.
-    int addValue(int value, char direction);
+    int addValue(int value, char direction, bool hasBeenMoved);
 
     // Resets tile value to zero.
     void zeroValue();
@@ -53,9 +53,15 @@ public:
     // Clears extra zeros after a tile is succesfully moved.
     void clearZeros(int value, char direction);
 
+    void resetHasBeenMoved();
+
+    bool getHasBeenMoved();
+
 private:
     // Private part contains variables and methods that shouldn't be usable
     // outside the class.
+
+    bool hasBeenMoved_;
 
     // Value of the tile.
     int value_;
