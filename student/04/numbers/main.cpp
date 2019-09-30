@@ -100,7 +100,7 @@ void print(std::vector<std::vector<NumberTile>> &board){
 }
 
 
-// Checks if the user given input is rigth and acceptable. Continues asking until the
+// Checks if the user given input is rigth and acceptable. Continues asking until
 // right input is given.
 char userInput(){
 
@@ -110,6 +110,7 @@ char userInput(){
         char userInput;
         std::cout << "Dir> ";
         std::cin >> userInput;
+        // Checks that the user has given legit input
         for( auto x : INPUTS){
             if(x == userInput){
                 correctInput = true;
@@ -119,6 +120,7 @@ char userInput(){
         }
         std::cout << "Error: unknown command." << std::endl;
     }
+    return 0;
 }
 
 //Asks user for the goal wanted to set.
@@ -127,6 +129,7 @@ int askGoal(){
     std::cout << "Give a goal value or an empty line: ";
     std::string goalStr = "";
     getline(std::cin, goalStr);
+    // If user gives empty line, DEFAULT_GOAL is used as a goal
     if(goalStr == ""){
         goal = DEFAULT_GOAL;
     } else{
@@ -140,8 +143,56 @@ bool hasWon(std::vector<std::vector<NumberTile>> &board, int goal){
     for( auto y : board ){
         for( auto x : y){
             if(x.hasWon(goal)){
-                std::cout << "You reached the goal value of " << goal << "!" << std::endl;
+                std::cout << "You reached the goal value of " << goal << "!" <<
+                             std::endl;
                 return true;
+            }
+        }
+    }
+
+    return 0;
+}
+
+// CLear zeros after succesful move.
+void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
+{
+    // Clears zeros after a succesful move to left.
+    if(direction == 'a'){
+        for( int y = 0 ; y < SIZE ; y++ ){
+            for( int x = SIZE - 1 ; x > 0 ; x-- ){
+                // Adds the value of a tile in the right hand side to a tile on the left.
+                board.at(y).at(x - 1).clearZeros(board.at(y).at(x).getValue(),
+                                                 direction);
+            }
+        }
+    }
+    // Clears zeros after a succesful move to right.
+    if( direction == 'd'){
+        for( int y = 0 ; y < SIZE ; y++ ){
+            for( int x = 0 ; x < SIZE - 1; x++ ){
+                // Adds the value of a tile in the left hand side to a tile on the right.
+                board.at(y).at(x + 1).clearZeros(board.at(y).at(x).getValue(),
+                                                 direction);
+            }
+        }
+    }
+    // Clear zeros after a succesful move upwards.
+    if(direction == 'w'){
+        for( int x = 0 ; x < SIZE ; x++){
+            for( int y = SIZE - 1 ; y > 0 ; y--){
+                // Adds the value of a tile underneath the another tile.
+                board.at(y - 1).at(x).clearZeros(board.at(y).at(x).getValue(),
+                                                 direction);
+            }
+        }
+    }
+    // Clear zeros after a succesful move downwards.
+    if(direction == 's'){
+        for( int x = 0; x < SIZE ; x++){
+            for( int y = 0 ; y < SIZE - 1 ; y++){
+                // Adds the value of a tile underneath the another.
+                board.at(y + 1).at(x).clearZeros(board.at(y).at(x).getValue(),
+                                                 direction);
             }
         }
     }
@@ -169,6 +220,7 @@ int main()
         bool success = board.at(0).at(0).moveTile(direction, SIZE);
         //Adds new value to a empty tile.
         if(success){
+            clearZeros(board, direction);
             newValue(board, randomEng, distr);}
         //If new tile can't be added player has lost the game.
         else {

@@ -35,18 +35,23 @@ public:
     // if the tile already contains some value.
     bool setValue(int value);
 
-    // Moves the number to user given direction, if possible.
+    // Moves the tile to user given direction, if possible. Counts succesful moves.
     int moveTile(char direction, const int SIZE);
 
+    // Returns value of a tile.
     int getValue();
 
-    std::string getCoords();
-
+    //Adds value of another tile to another.
     int addValue(int value, char direction);
 
+    // Resets tile value to zero.
     void zeroValue();
 
+    // Checks is the tile value is more or exactly the goal value.
     bool hasWon(int goal);
+
+    // Clears extra zeros after a tile is succesfully moved.
+    void clearZeros(int value, char direction);
 
 private:
     // Private part contains variables and methods that shouldn't be usable
@@ -55,8 +60,10 @@ private:
     // Value of the tile.
     int value_;
 
+    // Coordinaters of a tile.
     std::pair<int, int> coords_;
 
+    // Pointer to the board where the tile is.
     std::vector<std::vector<NumberTile>>* board_;
 };
 
