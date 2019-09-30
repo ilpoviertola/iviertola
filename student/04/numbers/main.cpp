@@ -163,6 +163,7 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile in the right hand side to a tile on the left.
                 board.at(y).at(x - 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
+                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
                 board.at(y).at(x - 1).resetHasBeenMoved();
             }
         }
@@ -174,6 +175,7 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile in the left hand side to a tile on the right.
                 board.at(y).at(x + 1).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
+                // Resets hasBeenMoved_ so the tiles can be moved on the next round.
                 board.at(y).at(x + 1).resetHasBeenMoved();
             }
         }
@@ -185,6 +187,7 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile underneath the another tile.
                 board.at(y - 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
+                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
                 board.at(y - 1).at(x).resetHasBeenMoved();
             }
         }
@@ -196,6 +199,7 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
                 // Adds the value of a tile underneath the another.
                 board.at(y + 1).at(x).clearZeros(board.at(y).at(x).getValue(),
                                                  direction);
+                // Resets the hasBeenMoved_ so the tiles can be moved on the next round.
                 board.at(y + 1).at(x).resetHasBeenMoved();
             }
         }

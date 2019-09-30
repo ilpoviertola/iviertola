@@ -62,10 +62,16 @@ int NumberTile::addValue(int value, char direction, bool hasBeenMoved)
     // as the value in the moving tile or zero.
     if((value_ == value && hasBeenMoved == false) or (value_ == 0 && hasBeenMoved == false)){
 
+        // When the tile is being moved over a blank tile, the move doesn't count.
+        if(value_ == 0 or value == 0){
+            hasBeenMoved_ = false;
+        } else{
+            hasBeenMoved_ = true;
+        }
+
         // Adds value of the tile which was moved on an another, to the tile
         // the tile was moved on.
         value_ += value;
-        hasBeenMoved_ = true;
 
         moves += 1;
 
@@ -174,6 +180,8 @@ int NumberTile::moveTile(char direction, const int SIZE)
             }
         }
     }
+
+
     return moves;
 }
 

@@ -53,14 +53,17 @@ public:
     // Clears extra zeros after a tile is succesfully moved.
     void clearZeros(int value, char direction);
 
+    // At the end of the rround, resets hasBeenMoved_ to false.
     void resetHasBeenMoved();
 
+    // Returns hasBeenMoved_
     bool getHasBeenMoved();
 
 private:
     // Private part contains variables and methods that shouldn't be usable
     // outside the class.
 
+    // Tells if the tile has already been moved and so cannot be moved again.
     bool hasBeenMoved_;
 
     // Value of the tile.
