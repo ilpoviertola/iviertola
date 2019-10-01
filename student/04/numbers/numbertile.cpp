@@ -4,6 +4,14 @@
  *
  * Method implementations should be added to the same level as the existing
  * ones.
+ *
+ * Program author ( Fill with your own info )
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
+ *
  * */
 #include "numbertile.hh"
 #include <iomanip>

@@ -5,6 +5,13 @@
  * Students can modify both parts of the class and add their own variables
  * and methods. Implementations for the methods should be in the source file.
  *
+ *
+ * Program author ( Fill with your own info )
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
  * */
 #ifndef NUMBERTILE_HH
 #define NUMBERTILE_HH
