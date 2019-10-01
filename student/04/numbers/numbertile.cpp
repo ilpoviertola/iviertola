@@ -53,21 +53,17 @@ int NumberTile::getValue()
 }
 
 //Adds value to the tile when tiles are being moved.
-int NumberTile::addValue(int value, char direction)
+void NumberTile::addValue(int value, char direction)
 {
-    // Amount of succesful moves when a direction is called.
-    int moves = 0;
 
-    // Move can be performed if tile value the tile is moving on is the same
-    // as the value in the moving tile or zero.
+    // Move can be performed if tile value which the tile is moving on is the
+    // same as the value in the moving tile or zero.
     if(value_ == value or value_ == 0 or value == 0){
 
 
         // Adds value of the tile which was moved on an another, to the tile
         // the tile was moved on.
         value_ += value;
-
-        moves += 1;
 
         if(direction == 'a'){
             // Zeros the value of the tile on the right hand side.
@@ -89,7 +85,6 @@ int NumberTile::addValue(int value, char direction)
             board_->at(coords_.first - 1).at(coords_.second).zeroValue();
         }
     }
-    return moves;
 }
 
 // Clear the "extra" zeros afger moving tile.

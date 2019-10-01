@@ -39,7 +39,7 @@ public:
     int getValue();
 
     //Adds value of another tile to another.
-    int addValue(int value, char direction);
+    void addValue(int value, char direction);
 
     // Resets tile value to zero.
     void zeroValue();
