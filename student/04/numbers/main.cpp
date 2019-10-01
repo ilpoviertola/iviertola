@@ -13,12 +13,14 @@
  * tile can't be added to the board.
  *
  * Program author ( Fill with your own info )
- * Name: Teemu Teekkari
- * Student number: 123456
- * UserID: teekkart ( Necessary due to gitlab folder naming. )
- * E-Mail: teemu.teekkari@tuni.fi
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
  *
  * Notes about the program and it's implementation:
+ *
+ *
  * */
 
 #include "numbertile.hh"
@@ -100,7 +102,7 @@ void print(std::vector<std::vector<NumberTile>> &board){
 }
 
 
-// Checks if the user given input is rigth and acceptable. Continues asking
+// Checks if the user given input is right and acceptable. Continues asking
 // until right input is given.
 char userInput(){
 
@@ -200,6 +202,7 @@ void clearZeros(std::vector<std::vector<NumberTile>> &board, char direction)
     }
 }
 
+// Calls tiles and moves them around the board with addValue method.
 void moveTile(std::vector<std::vector<NumberTile>> &board, char direction)
 {
     if( direction == 'a' ){
