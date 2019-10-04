@@ -5,9 +5,10 @@
 int readWriteFile(std::string inputFile, std::string outputFile)
 {
     std::ifstream fileObj(inputFile);
-    std::ofstream fileObjW(outputFile);
 
     if(fileObj){
+
+        std::ofstream fileObjW(outputFile);
 
         int rowNmbr = 1;
         std::string row;
@@ -21,13 +22,13 @@ int readWriteFile(std::string inputFile, std::string outputFile)
         fileObj.close();
         fileObjW.close();
 
-        return(EXIT_SUCCESS);
+        return EXIT_SUCCESS;
 
 
     } else {
 
         std::cout << "Error! The file " << inputFile << " cannot be opened." << std::endl;
-        return(EXIT_FAILURE);
+        return EXIT_FAILURE;
 
     }
 
