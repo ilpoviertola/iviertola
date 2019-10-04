@@ -22,13 +22,13 @@ int readWriteFile(std::string inputFile, std::string outputFile)
         fileObj.close();
         fileObjW.close();
 
-        return EXIT_SUCCESS;
+        exit( EXIT_SUCCESS );
 
 
     } else {
 
         std::cout << "Error! The file " << inputFile << " cannot be opened." << std::endl;
-        return EXIT_FAILURE;
+        exit( EXIT_FAILURE );
 
     }
 
