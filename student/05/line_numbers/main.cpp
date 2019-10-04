@@ -21,6 +21,8 @@ int readWriteFile(std::string inputFile, std::string outputFile)
         fileObj.close();
         fileObjW.close();
 
+        return(EXIT_SUCCESS);
+
 
     } else {
 
@@ -28,8 +30,6 @@ int readWriteFile(std::string inputFile, std::string outputFile)
         return(EXIT_FAILURE);
 
     }
-
-    return 0;
 
 }
 
