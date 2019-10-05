@@ -34,6 +34,7 @@ int main()
 
         fileObj.close();
 
+        std::cout << "Final scores:" << std::endl;
         for(auto name : scoreboard){
             std::cout << name.first << ": " << name.second << std::endl;
         }
