@@ -46,7 +46,7 @@ int main()
             std::vector< std::string > parts_no_empty  = split(row, separator);
 
             for( auto word : parts_no_empty){
-                if(data.find(word) != data.end()){
+                if(data.find(word) != data.end() && data.at(word).first < rowNmbr){
 
                     data.at(word).first += 1;
                     data.at(word).second += ", "+std::to_string(rowNmbr);
