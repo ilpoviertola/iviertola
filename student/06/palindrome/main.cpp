@@ -14,9 +14,9 @@ bool palindrome_recursive(std::string s)
   // Add your implementation here
 
   std::string::size_type length = s.length();
-  if(s.at(0) != s.at(length - 1)){
+  if(length == 1 or length == 0){
       return false;
-  } else if(length == 1){
+  } else if(s.at(0) != s.at(length - 1)){
       return true;
   } else {
       s.erase(length - 1);
