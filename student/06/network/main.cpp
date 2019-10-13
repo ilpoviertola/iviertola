@@ -46,7 +46,7 @@ void print(std::map<std::string, std::vector<std::string>> network_copy, const s
 
         if( network_copy.find(name) != network_copy.end()){
             int new_level = level + 1;
-            print(network_copy, name, found, new_level);
+            print(network_copy, name, new_level);
         }
 
     }
@@ -58,14 +58,12 @@ int count(std::map<std::string, std::vector<std::string>> network_copy, std::str
 
     for( std::string name : network_copy.at(id) ){
         ++counter;
-        std::cout << id << " " << name << std::endl;
         if( network_copy.find(name) != network_copy.end() ){
             found.push_back(name);
         }
     }
 
     for( std::string name : found ){
-        std::cout << name <<  " löyty" << std::endl;
         found.erase(found.begin());
         return counter + count(network_copy, name, found);
     }
