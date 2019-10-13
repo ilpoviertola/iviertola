@@ -29,79 +29,47 @@ std::vector<std::string> split(const std::string& s, const char delimiter, bool 
     return result;
 }
 
-void print(std::map<std::string, std::vector<std::string>> network_copy, const std::string id, int level)
+void print(std::map<std::string, std::vector<std::string>> network_copy, const std::string id, const int level)
 {
-    int size = network_copy.size();
-    std::vector<std::string> tmp = network_copy.at(id);
-    network_copy.erase(id);
-    if(size == 1){
-        for(std::string name : tmp){
-            std::string output = "";
-            for(int i = 0 ; i < level ; ++i){
-                output += "..";
-            }
 
-            output += name;
+    for( std::string name : network_copy.at(id) ){
 
-            std::cout << output << std::endl;
+        std::string output = "";
+
+        for(int i = 0 ; i < level ; ++i){
+            output += "..";
         }
-    }
-    else {
-        for(std::string key : tmp){
-            if(network_copy.find(key) != network_copy.end()){
-                std::string output = "";
 
-                for(int i = 0 ; i < level ; ++i){
-                    output += "..";
-                }
+        output += name;
 
-                output += key;
+        std::cout << output << std::endl;
 
-                std::cout << output << std::endl;
-                print(network_copy, key, level += 1);
-
-            } else {
-                std::string output = "";
-
-                for(int i = 0 ; i < level ; ++i){
-                    output += "..";
-                }
-
-                output += key;
-
-                std::cout << output << std::endl;
-            }
+        if( network_copy.find(name) != network_copy.end()){
+            int new_level = level + 1;
+            print(network_copy, name, found, new_level);
         }
+
     }
 }
 
-int count(std::map<std::string, std::vector<std::string>> network_copy, std::string id, int counter)
+int count(std::map<std::string, std::vector<std::string>> network_copy, std::string id, std::vector<std::string> found)
 {
-//    int size = network_copy.size();
-//    std::vector<std::string> tmp = network_copy.at(id);
-//    network_copy.erase(id);
-//
-//    if(size == 1) {
-//        for(long unsigned int i = 0 ; i < tmp.size() ; ++i){
-//            ++counter;
-//        }
-//
-//        std::cout <<  counter << std::endl;
-//    }
-//    else {
-//       for(std::string name : tmp){
-//           ++counter;
-//            if(network_copy.find(name) != network_copy.end()){
-//                count(network_copy, name, counter);
-//            }
-//        }
-//    }
+    int counter = 0;
+
     for( std::string name : network_copy.at(id) ){
         ++counter;
+        std::cout << id << " " << name << std::endl;
         if( network_copy.find(name) != network_copy.end() ){
-            return count(network_copy, name, counter);
+            found.push_back(name);
         }
     }
+
+    for( std::string name : found ){
+        std::cout << name <<  " löyty" << std::endl;
+        found.erase(found.begin());
+        return counter + count(network_copy, name, found);
+    }
+
     return counter;
 }
 
@@ -170,7 +138,8 @@ int main()
             // TODO: Implement the command here!
             if(network.find(id) != network.end()){
                 std::map<std::string, std::vector<std::string>> network_copy(network);
-                std::cout << count(network_copy, id, 0) << std::endl;
+                std::vector<std::string> found;
+                std::cout << count(network_copy, id, found) << std::endl;
             }
             else {
                 std::cout << 0 << std::endl;
