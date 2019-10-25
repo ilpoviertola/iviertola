@@ -25,9 +25,14 @@ std::string Line::get_name() const
 
 void Line::print_stations()
 {
-    for( std::string station : stations_){
+    for( std::string station : stations_ ){
         std::cout << " - " << station << std::endl;
     }
+}
+
+std::vector<std::string> Line::get_stations() const
+{
+    return stations_;
 }
 
 // Adds a new station to the line.

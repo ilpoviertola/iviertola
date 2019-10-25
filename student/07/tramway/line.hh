@@ -24,6 +24,7 @@ public:
     std::string get_name() const;
     bool add_station(std::string stationName);
     void print_stations();
+    std::vector<std::string> get_stations() const;
 
 private:
 
