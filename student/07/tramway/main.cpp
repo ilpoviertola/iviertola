@@ -16,6 +16,9 @@
 #include <algorithm>
 #include <fstream>
 #include <cstdlib>
+#include <numeric>
+#include <sstream>
+#include <iterator>
 
 using Network = std::map<std::string, Line>;
 
@@ -61,9 +64,8 @@ bool add_station(std::vector<std::string> parts, Network& network)
 }
 
 // Reads file.
-bool read_file()
+bool read_file(Network& network)
 {
-    Network network;
 
     std::string inputFile = "";
 
@@ -95,27 +97,73 @@ bool read_file()
         std::cout << "Error: File could not be read." << std::endl;
         return EXIT_FAILURE;
     }
-
     return 0;
 }
 
 // Asks for input and checks if the user given input is legit.
-bool user_input(std::vector<std::string> inputs)
+// Returns a dataPair which contains info about good input (bool) or
+// additionalInfo (station to be added etc.)
+std::pair<bool, std::string> user_input(std::string usrFeed)
 {
+    std::pair<bool, std::string> dataPair;
+    const std::vector<std::string> single_inputs = {"QUIT", "LINES"};
+    const std::vector<std::string> multi_inputs = {"LINE"};
 
-    std::string usrFeed = "";
-    std::cout << "tramway> ";
-    getline( std::cin, usrFeed );
+    std::vector<std::string> tmp = split(usrFeed, ' ', true);
 
-    for( std::string input : inputs ){
-        if( input == usrFeed ){
-            return true;
-        }
-        else {
-            return false;
+    if( tmp.size() > 1 ){
+        for( std::string command : multi_inputs ){
+
+            if( tmp.at(0) == command ){
+                usrFeed = tmp.at(0);
+                tmp.erase(tmp.begin());
+                std::ostringstream vts;
+                std::copy(tmp.begin(), tmp.end()-1, std::ostream_iterator<std::string>(vts, " "));
+                vts << tmp.back();
+                // additionalInfo can be station to be added etc.
+                std::string additionalInfo = vts.str();
+                dataPair = std::make_pair(true, additionalInfo);
+                break;
+            }
+
+            else {
+                dataPair = std::make_pair(false, "");
+            }
         }
     }
-    return 0;
+    else {
+        for( std::string command : single_inputs ){
+            if( tmp.at(0) == command ){
+                dataPair = std::make_pair(true, "");
+                break;
+            }
+            else {
+                dataPair = std::make_pair(false, "");
+            }
+        }
+    }
+    return dataPair;
+}
+
+// Prints all the routes in alphabetical order.
+void print_lines(Network& network)
+{
+    std::cout << "All tramlines in alphabetical order:" << std::endl;
+    for(std::map<std::string, Line>::iterator it = network.begin(); it != network.end(); ++it ){
+        std::cout << it->first << std::endl;
+    }
+}
+
+// Prints stations along the selected route.
+void print_stations_on_line(Network& network, std::string line)
+{
+    if(network.find(line) != network.end()){
+        std::cout << "Line " << line << " goes through these stations in the order they are listed:" << std::endl;
+        network.at(line).print_stations();
+    }
+    else {
+        std::cout << "Error: Line could not be found." << std::endl;
+    }
 }
 
 // The most magnificent function in this whole program.
@@ -137,15 +185,35 @@ void print_rasse()
 // Short and sweet main.
 int main()
 {
-    std::vector<std::string> inputs = {"QUIT"};
+    Network network;
     print_rasse();
 
-    bool exit = read_file();
+    bool exit = read_file(network);
 
-    while(not exit){
+    while( not exit ){
 
-        if( user_input(inputs) ){
-            continue;
+        std::string usrFeed = "";
+        std::cout << "tramway> ";
+        getline( std::cin, usrFeed );
+
+        std::pair<bool, std::string> dataPair = user_input(usrFeed);
+
+        if( dataPair.first ){
+            if( usrFeed == "QUIT" ){
+                return EXIT_SUCCESS;
+                break;
+            }
+            else if( usrFeed == "LINES" ){
+                print_lines(network);
+            }
+            else if( split(usrFeed, ' ', true).at(0) == "LINE" ){
+                if( user_input(usrFeed).second.size() > 0 ){
+                    print_stations_on_line(network, user_input(usrFeed).second);
+                }
+                else {
+                    std::cout << "Error: Invalid input." << std::endl;
+                }
+            }
         }
 
         else{
@@ -153,6 +221,4 @@ int main()
         }
 
     }
-
-    return EXIT_SUCCESS;
 }

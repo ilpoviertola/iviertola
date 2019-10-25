@@ -23,6 +23,13 @@ std::string Line::get_name() const
     return name_;
 }
 
+void Line::print_stations()
+{
+    for( std::string station : stations_){
+        std::cout << " - " << station << std::endl;
+    }
+}
+
 // Adds a new station to the line.
 bool Line::add_station(std::string stationName)
 {

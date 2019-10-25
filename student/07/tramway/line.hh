@@ -23,6 +23,7 @@ public:
     Line(std::string name, std::vector<std::string> stations);
     std::string get_name() const;
     bool add_station(std::string stationName);
+    void print_stations();
 
 private:
 
