@@ -99,6 +99,25 @@ bool read_file()
     return 0;
 }
 
+// Asks for input and checks if the user given input is legit.
+bool user_input(std::vector<std::string> inputs)
+{
+
+    std::string usrFeed = "";
+    std::cout << "tramway> ";
+    getline( std::cin, usrFeed );
+
+    for( std::string input : inputs ){
+        if( input == usrFeed ){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    return 0;
+}
+
 // The most magnificent function in this whole program.
 // Prints a RASSE
 void print_rasse()
@@ -118,11 +137,22 @@ void print_rasse()
 // Short and sweet main.
 int main()
 {
-    Network network;
-
+    std::vector<std::string> inputs = {"QUIT"};
     print_rasse();
 
-    read_file();
+    bool exit = read_file();
+
+    while(not exit){
+
+        if( user_input(inputs) ){
+            continue;
+        }
+
+        else{
+            std::cout << "Error: Invalid input." << std::endl;
+        }
+
+    }
 
     return EXIT_SUCCESS;
 }
