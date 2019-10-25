@@ -119,6 +119,7 @@ void print_rasse()
 int main()
 {
     Network network;
+
     print_rasse();
 
     read_file();

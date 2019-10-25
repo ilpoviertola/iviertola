@@ -19,11 +19,13 @@
 class Line
 {
 public:
+
     Line(std::string name, std::vector<std::string> stations);
     std::string get_name() const;
     bool add_station(std::string stationName);
 
 private:
+
     std::string name_;
     std::vector<std::string> stations_;
 };
