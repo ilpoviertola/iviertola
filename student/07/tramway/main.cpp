@@ -156,7 +156,7 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
     const std::vector<std::string> multi_inputs = {"LINE",
                                                    "STATION", "ADDLINE",
                                                    "ADDSTATION", "REMOVE",
-                                                  "line", "station", "addline"
+                                                  "line", "station", "addline",
                                                   "addstation", "remove"};
 
     std::vector<std::string> tmp = split(usrFeed, ' ', true);
