@@ -25,6 +25,9 @@ public:
     bool add_station(std::string stationName);
     void print_stations();
     std::vector<std::string> get_stations() const;
+    bool is_station_on_line(std::string stationName);
+    void add_station_between(std::string newStation, std::string nextStation);
+    int remove_station(std::string station);
 
 private:
 

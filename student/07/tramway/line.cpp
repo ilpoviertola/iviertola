@@ -18,11 +18,13 @@ Line::Line(std::string name, std::vector<std::string> stations):
     name_(name), stations_(stations){
 }
 
+// Returns the name of the line.
 std::string Line::get_name() const
 {
     return name_;
 }
 
+// Prints out all the stations.
 void Line::print_stations()
 {
     for( std::string station : stations_ ){
@@ -30,9 +32,45 @@ void Line::print_stations()
     }
 }
 
+// Returns all the stations.
 std::vector<std::string> Line::get_stations() const
 {
     return stations_;
+}
+
+// Returns true if stationName is on the line.
+bool Line::is_station_on_line(std::string stationName)
+{
+    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), stationName);
+
+    if( it == stations_.end() ){
+        return false;
+    }
+    else{
+        return true;
+    }
+}
+
+// Adds newStation in front of nextStation.
+void Line::add_station_between(std::string newStation, std::string nextStation)
+{
+    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), nextStation);
+    stations_.insert( it, newStation );
+
+}
+
+// Removes the station from the line.
+int Line::remove_station(std::string station)
+{
+    int erased = 0;
+
+    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), station);
+    if( it != stations_.end() ){
+        stations_.erase(it);
+        ++ erased;
+    }
+
+    return erased;
 }
 
 // Adds a new station to the line.
