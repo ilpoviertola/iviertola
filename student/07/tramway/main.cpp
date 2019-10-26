@@ -151,10 +151,13 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
 {
     std::pair<bool, std::vector<std::string>> dataPair;
     const std::vector<std::string> single_inputs = {"QUIT", "LINES",
-                                                    "STATIONS"};
+                                                    "STATIONS", "quit",
+                                                   "lines", "stations"};
     const std::vector<std::string> multi_inputs = {"LINE",
                                                    "STATION", "ADDLINE",
-                                                   "ADDSTATION", "REMOVE"};
+                                                   "ADDSTATION", "REMOVE",
+                                                  "line", "station", "addline"
+                                                  "addstation", "remove"};
 
     std::vector<std::string> tmp = split(usrFeed, ' ', true);
 
@@ -357,14 +360,15 @@ int main()
 
 
         if( dataPair.first ){
-            if( usrFeed == "QUIT" ){
+            if( usrFeed == "QUIT" || usrFeed == "quit" ){
                 return EXIT_SUCCESS;
                 break;
             }
-            else if( usrFeed == "LINES" ){
+            else if( usrFeed == "LINES" || usrFeed == "lines" ){
                 print_lines(network);
             }
-            else if( split(usrFeed, ' ', true).at(0) == "LINE" ){
+            else if( split(usrFeed, ' ', true).at(0) == "LINE" ||
+                     split(usrFeed, ' ', true).at(0) == "line" ){
                 if( dataPair.second.size() == 1 ){
                     print_stations_on_line(network, dataPair.second.at(0));
                 }
@@ -372,10 +376,11 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( usrFeed == "STATIONS" ){
+            else if( usrFeed == "STATIONS" || usrFeed == "stations" ){
                 print_stations(network);
             }
-            else if( split(usrFeed, ' ', true).at(0) == "STATION" ){
+            else if( split(usrFeed, ' ', true).at(0) == "STATION" ||
+                     split(usrFeed, ' ', true).at(0) == "station" ){
                 if( dataPair.second.size() == 1 ){
                     print_lines_on_station(network, dataPair.second.at(0));
                 }
@@ -383,7 +388,8 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "ADDLINE" ){
+            else if( split(usrFeed, ' ', true).at(0) == "ADDLINE" ||
+                     split(usrFeed, ' ', true).at(0) == "addline"){
                 if( dataPair.second.size() == 1 ){
                     add_line(network, dataPair.second.at(0));
                 }
@@ -391,7 +397,8 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "ADDSTATION" ){
+            else if( split(usrFeed, ' ', true).at(0) == "ADDSTATION" ||
+                     split(usrFeed, ' ', true).at(0) == "addstation" ){
                 if( dataPair.second.size() > 1 ){
                     add_station(network, dataPair.second);
                 }
@@ -399,7 +406,8 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "REMOVE" ){
+            else if( split(usrFeed, ' ', true).at(0) == "REMOVE" ||
+                     split(usrFeed, ' ', true).at(0) == "remove" ){
                 if( dataPair.second.size() == 1 ){
                     remove_station(network, dataPair.second.at(0));
                 }
