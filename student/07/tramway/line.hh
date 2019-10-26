@@ -1,11 +1,14 @@
-/* Program author
+/* Class: Line
+ *
+ * Acts as a line in the network.
+ *
+ * Contains name of the line and stations on it.
+ *
+ * Program author
  * Name: Ilpo Viertola
  * Student number: 272634
  * UserID: viertoli ( Necessary due to gitlab folder naming. )
  * E-Mail: ilpo.viertola@tuni.fi
- *
- * Notes about the program and it's implementation:
- *
  *
  * */
 #ifndef LINE_HH

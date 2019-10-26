@@ -1,11 +1,19 @@
-/* Program author
+/* Program for Rasse's line network
+ *
+ * Desc:
+ * In this program the user can modify and examine Rasse's tramway network
+ * in Tampere. Functions available are LINES, STATIONS, LINE <line's name>,
+ * STATION <station's name>, REMOVE <station's name>, ADDLINE <line's name>,
+ * ADDSTATION <line's name> <new station> (<next station>) and QUIT. If the
+ * station's/line's name consists from more than one word, must the name be
+ * given inside quotation marks. Space between words that aren't in a quotat-
+ * ion marks are considered as different parameters.
+ *
+ * Program author
  * Name: Ilpo Viertola
  * Student number: 272634
  * UserID: viertoli ( Necessary due to gitlab folder naming. )
  * E-Mail: ilpo.viertola@tuni.fi
- *
- * Notes about the program and it's implementation:
- *
  *
  * */
 #include "line.hh"
@@ -44,7 +52,7 @@ std::vector<std::string> split(const std::string& s, const char delimiter, bool 
     return result;
 }
 
-// Add station to line.
+// Add station to line in the network map.
 bool add_station(std::vector<std::string> parts, Network& network)
 {
 
@@ -63,7 +71,7 @@ bool add_station(std::vector<std::string> parts, Network& network)
 
 }
 
-// Reads file.
+// Reads file. Returns 0 if it's succesful.
 bool read_file(Network& network)
 {
 
@@ -79,19 +87,20 @@ bool read_file(Network& network)
         while( getline( fileObj, row ) ){
             std::vector<std::string> parts = split( row, ';', false );
 
+            // Row isn't in format: Line;Station
             if( parts.size() < 2 ){
                 std::cout << "Error: Invalid format in file." << std::endl;
                 return EXIT_FAILURE;
                 break;
             }
 
+            // add_station returns false if the station already exists on the line.
             else if( !add_station( parts, network ) ){
                 std::cout << "Error: Station/line already exists." << std::endl;
                 return EXIT_FAILURE;
                 break;
             }
         }
-
 
     } else {
         std::cout << "Error: File could not be read." << std::endl;
@@ -100,18 +109,18 @@ bool read_file(Network& network)
     return 0;
 }
 
-// Clears user input from quotation marks. Returns a vector
+// Clears user input from quotation marks. Returns a vector additionalInfo
 // containing user input(s).
 std::vector<std::string> clean_user_input(std::vector<std::string> tmp)
 {
-    std::vector<std::string> additionalInfoVec;
+    std::vector<std::string> additionalInfo;
     std::string input = "";
     bool sameInput = false;
 
     for( std::string part : tmp ){
         if( part.front() == '"' && part.back() == '"' ){
             part = part.substr(1, part.length() - 2);
-            additionalInfoVec.push_back(part);
+            additionalInfo.push_back(part);
         }
         else if( part.front() == '"' ){
             part = part + " ";
@@ -123,29 +132,33 @@ std::vector<std::string> clean_user_input(std::vector<std::string> tmp)
         }
         else if( sameInput && part.back() == '"' ){
             input += part.substr(0, part.length() - 1);
-            additionalInfoVec.push_back(input);
+            additionalInfo.push_back(input);
             input = "";
             sameInput = false;
         }
         else if( !sameInput && ( part.front() != '"' && part.back() != '"' ) ){
-            additionalInfoVec.push_back(part);
+            additionalInfo.push_back(part);
         }
     }
 
-    return additionalInfoVec;
+    return additionalInfo;
 }
 
 // Asks for input and checks if the user given input is legit.
-// Returns a dataPair which contains info about good input (bool) or
+// Returns a dataPair which contains info about good input (bool) and
 // additionalInfo (station to be added etc.)
 std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
 {
     std::pair<bool, std::vector<std::string>> dataPair;
-    const std::vector<std::string> single_inputs = {"QUIT", "LINES", "STATIONS"};
-    const std::vector<std::string> multi_inputs = {"LINE", "STATION", "ADDLINE", "ADDSTATION", "REMOVE"};
+    const std::vector<std::string> single_inputs = {"QUIT", "LINES",
+                                                    "STATIONS"};
+    const std::vector<std::string> multi_inputs = {"LINE",
+                                                   "STATION", "ADDLINE",
+                                                   "ADDSTATION", "REMOVE"};
 
     std::vector<std::string> tmp = split(usrFeed, ' ', true);
 
+    // User has given more than one parameter.
     if( tmp.size() > 1 ){
         for( std::string command : multi_inputs ){
 
@@ -155,7 +168,6 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
                 dataPair = std::make_pair(true, clean_user_input(tmp));
                 break;
             }
-
             else {
                 std::vector<std::string> additionalInfo = {};
                 dataPair = std::make_pair(false, additionalInfo);
@@ -182,7 +194,8 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
 void print_lines(Network& network)
 {
     std::cout << "All tramlines in alphabetical order:" << std::endl;
-    for(std::map<std::string, Line>::iterator it = network.begin(); it != network.end(); ++it ){
+    for(std::map<std::string, Line>::iterator it = network.begin();
+        it != network.end(); ++it ){
         std::cout << it->first << std::endl;
     }
 }
@@ -191,7 +204,8 @@ void print_lines(Network& network)
 void print_stations_on_line(Network& network, std::string line)
 {
     if(network.find(line) != network.end()){
-        std::cout << "Line " << line << " goes through these stations in the order they are listed:" << std::endl;
+        std::cout << "Line " << line << " goes through these stations in the "
+                                        "order they are listed:" << std::endl;
         network.at(line).print_stations();
     }
     else {
@@ -204,11 +218,13 @@ void print_stations(Network& network)
 {
     std::vector<std::string> allStations;
 
-    for(std::map<std::string, Line>::iterator itMap = network.begin(); itMap != network.end(); ++itMap ){
+    for(std::map<std::string, Line>::iterator itMap = network.begin();
+        itMap != network.end(); ++itMap ){
         std::vector<std::string> tmp = itMap->second.get_stations();
 
         for( std::string station : tmp ){
-            std::vector<std::string>::iterator itVec = std::find(allStations.begin(), allStations.end(), station);
+            std::vector<std::string>::iterator itVec =
+                    std::find(allStations.begin(), allStations.end(), station);
 
             if(itVec == allStations.end() ){
                 allStations.push_back(station);
@@ -224,14 +240,17 @@ void print_stations(Network& network)
     }
 }
 
+// Prints lines that goes through the user given station.
 void print_lines_on_station(Network& network, std::string station)
 {
     std::vector<std::string> lines;
 
-    for(std::map<std::string, Line>::iterator itMap = network.begin(); itMap != network.end(); ++itMap ){
+    for(std::map<std::string, Line>::iterator itMap = network.begin();
+        itMap != network.end(); ++itMap ){
         std::vector<std::string> tmp = itMap->second.get_stations();
 
-        std::vector<std::string>::iterator itVec = std::find(tmp.begin(), tmp.end(), station);
+        std::vector<std::string>::iterator itVec =
+                std::find(tmp.begin(), tmp.end(), station);
         if( itVec != tmp.end() ){
             lines.push_back( itMap->first );
         }
@@ -242,7 +261,8 @@ void print_lines_on_station(Network& network, std::string station)
     }
     else{
         std::sort(lines.begin(), lines.end());
-        std::cout << "Station " << station << " can be found on the following lines:" << std::endl;
+        std::cout << "Station " << station << " can be found on the following "
+                                              "lines:" << std::endl;
         for( std::string line : lines ){
             std::cout << " - " << line << std::endl;
         }
@@ -273,11 +293,14 @@ void add_station(Network& network, std::vector<std::string> data)
         if( network.at(data.at(0)).is_station_on_line(data.at(1))){
             std::cout << "Error: Station/line already exists." << std::endl;
         }
-        else if( data.size() < 3 || !network.at(data.at(0)).is_station_on_line(data.at(2))){
+        else if( data.size() < 3 || !network.at(data.at(0))
+                 .is_station_on_line(data.at(2))){
             network.at(data.at(0)).add_station(data.at(1));
+            std::cout << "Station was added." << std::endl;
         }
         else{
             network.at(data.at(0)).add_station_between(data.at(1), data.at(2));
+            std::cout << "Station was added." << std::endl;
         }
     }
     else{
@@ -290,7 +313,8 @@ void remove_station(Network& network, std::string station)
 {
     int erased = 0;
 
-    for(std::map<std::string, Line>::iterator itMap = network.begin(); itMap != network.end(); ++itMap ){
+    for(std::map<std::string, Line>::iterator itMap = network.begin();
+        itMap != network.end(); ++itMap ){
         erased += itMap->second.remove_station(station);
     }
 

@@ -1,11 +1,12 @@
-/* Program author
+/* Source file for Line class.
+ *
+ * Contains methods that handles stations on the line.
+ *
+ * Program author
  * Name: Ilpo Viertola
  * Student number: 272634
  * UserID: viertoli ( Necessary due to gitlab folder naming. )
  * E-Mail: ilpo.viertola@tuni.fi
- *
- * Notes about the program and it's implementation:
- *
  *
  * */
 #include "line.hh"
@@ -32,7 +33,7 @@ void Line::print_stations()
     }
 }
 
-// Returns all the stations.
+// Returns all the stations in a vector.
 std::vector<std::string> Line::get_stations() const
 {
     return stations_;
@@ -41,7 +42,8 @@ std::vector<std::string> Line::get_stations() const
 // Returns true if stationName is on the line.
 bool Line::is_station_on_line(std::string stationName)
 {
-    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), stationName);
+    std::vector<std::string>::iterator it =
+            std::find(stations_.begin(), stations_.end(), stationName);
 
     if( it == stations_.end() ){
         return false;
@@ -54,17 +56,20 @@ bool Line::is_station_on_line(std::string stationName)
 // Adds newStation in front of nextStation.
 void Line::add_station_between(std::string newStation, std::string nextStation)
 {
-    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), nextStation);
+    std::vector<std::string>::iterator it =
+            std::find(stations_.begin(), stations_.end(), nextStation);
     stations_.insert( it, newStation );
 
 }
 
-// Removes the station from the line.
+// Removes the station from the line. Returns number greater
+// than zero if the station was on the line.
 int Line::remove_station(std::string station)
 {
     int erased = 0;
 
-    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), station);
+    std::vector<std::string>::iterator it =
+            std::find(stations_.begin(), stations_.end(), station);
     if( it != stations_.end() ){
         stations_.erase(it);
         ++ erased;
@@ -76,7 +81,8 @@ int Line::remove_station(std::string station)
 // Adds a new station to the line.
 bool Line::add_station(std::string stationName)
 {
-    std::vector<std::string>::iterator it = std::find(stations_.begin(), stations_.end(), stationName);
+    std::vector<std::string>::iterator it =
+            std::find(stations_.begin(), stations_.end(), stationName);
 
     // Checks that the station doesn't already exist in the line.
     // Returns true if station can be added to the line.
