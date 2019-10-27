@@ -27,6 +27,8 @@
 #include <numeric>
 #include <sstream>
 #include <iterator>
+#include <stdio.h>
+#include <ctype.h>
 
 using Network = std::map<std::string, Line>;
 
@@ -74,6 +76,7 @@ bool add_station(std::vector<std::string> parts, Network& network)
 // Reads file. Returns 0 if it's succesful.
 bool read_file(Network& network)
 {
+   int returnValue = 0;
 
     std::string inputFile = "";
 
@@ -90,23 +93,24 @@ bool read_file(Network& network)
             // Row isn't in format: Line;Station
             if( parts.size() < 2 ){
                 std::cout << "Error: Invalid format in file." << std::endl;
-                return EXIT_FAILURE;
+                returnValue = EXIT_FAILURE;
                 break;
             }
 
             // add_station returns false if the station already exists on the line.
             else if( !add_station( parts, network ) ){
                 std::cout << "Error: Station/line already exists." << std::endl;
-                return EXIT_FAILURE;
+                returnValue = EXIT_FAILURE;
                 break;
             }
         }
 
     } else {
         std::cout << "Error: File could not be read." << std::endl;
-        return EXIT_FAILURE;
+        returnValue = EXIT_FAILURE;
     }
-    return 0;
+
+    return returnValue;
 }
 
 // Clears user input from quotation marks. Returns a vector additionalInfo
@@ -151,15 +155,16 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
 {
     std::pair<bool, std::vector<std::string>> dataPair;
     const std::vector<std::string> single_inputs = {"QUIT", "LINES",
-                                                    "STATIONS", "quit",
-                                                   "lines", "stations"};
+                                                    "STATIONS"};
     const std::vector<std::string> multi_inputs = {"LINE",
                                                    "STATION", "ADDLINE",
-                                                   "ADDSTATION", "REMOVE",
-                                                  "line", "station", "addline",
-                                                  "addstation", "remove"};
+                                                   "ADDSTATION", "REMOVE"};
 
     std::vector<std::string> tmp = split(usrFeed, ' ', true);
+
+    std::for_each(tmp.at(0).begin(), tmp.at(0).end(), [](char & c){
+        c = ::toupper(c);
+    });
 
     // User has given more than one parameter.
     if( tmp.size() > 1 ){
@@ -324,6 +329,9 @@ void remove_station(Network& network, std::string station)
     if( !erased ){
         std::cout << "Error: Station could not be found." << std::endl;
     }
+    else{
+        std::cout << "Station was removed from all lines." << std::endl;
+    }
 }
 
 // The most magnificent function in this whole program.
@@ -356,19 +364,23 @@ int main()
         std::cout << "tramway> ";
         getline( std::cin, usrFeed );
 
+        std::string usrFeedCapitalized = split(usrFeed, ' ', true).at(0);
         std::pair<bool, std::vector<std::string>> dataPair = user_input(usrFeed);
 
+        // Make user input capitalized.
+        std::for_each(usrFeedCapitalized.begin(), usrFeedCapitalized.end(), [](char & c){
+            c = ::toupper(c);
+        });
 
-        if( dataPair.first ){
-            if( usrFeed == "QUIT" || usrFeed == "quit" ){
+        if( dataPair.first ){            
+            if( usrFeedCapitalized == "QUIT" ){
                 return EXIT_SUCCESS;
                 break;
             }
-            else if( usrFeed == "LINES" || usrFeed == "lines" ){
+            else if( usrFeedCapitalized == "LINES"){
                 print_lines(network);
             }
-            else if( split(usrFeed, ' ', true).at(0) == "LINE" ||
-                     split(usrFeed, ' ', true).at(0) == "line" ){
+            else if( usrFeedCapitalized == "LINE" ){
                 if( dataPair.second.size() == 1 ){
                     print_stations_on_line(network, dataPair.second.at(0));
                 }
@@ -376,7 +388,7 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( usrFeed == "STATIONS" || usrFeed == "stations" ){
+            else if( usrFeedCapitalized == "STATIONS" ){
                 print_stations(network);
             }
             else if( split(usrFeed, ' ', true).at(0) == "STATION" ||
@@ -388,8 +400,7 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "ADDLINE" ||
-                     split(usrFeed, ' ', true).at(0) == "addline"){
+            else if( usrFeedCapitalized == "ADDLINE" ){
                 if( dataPair.second.size() == 1 ){
                     add_line(network, dataPair.second.at(0));
                 }
@@ -397,8 +408,7 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "ADDSTATION" ||
-                     split(usrFeed, ' ', true).at(0) == "addstation" ){
+            else if( usrFeedCapitalized == "ADDSTATION" ){
                 if( dataPair.second.size() > 1 ){
                     add_station(network, dataPair.second);
                 }
@@ -406,8 +416,7 @@ int main()
                     std::cout << "Error: Invalid input." << std::endl;
                 }
             }
-            else if( split(usrFeed, ' ', true).at(0) == "REMOVE" ||
-                     split(usrFeed, ' ', true).at(0) == "remove" ){
+            else if( usrFeedCapitalized == "REMOVE" ){
                 if( dataPair.second.size() == 1 ){
                     remove_station(network, dataPair.second.at(0));
                 }
