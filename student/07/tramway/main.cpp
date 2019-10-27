@@ -161,6 +161,7 @@ std::pair<bool, std::vector<std::string>> user_input(std::string usrFeed)
 
     std::vector<std::string> tmp = split(usrFeed, ' ', true);
 
+    // Makes user given command capitalized.
     std::for_each(tmp.at(0).begin(), tmp.at(0).end(), [](char & c){
         c = ::toupper(c);
     });
@@ -390,8 +391,7 @@ int main()
             else if( usrFeedCapitalized == "STATIONS" ){
                 print_stations(network);
             }
-            else if( split(usrFeed, ' ', true).at(0) == "STATION" ||
-                     split(usrFeed, ' ', true).at(0) == "station" ){
+            else if( usrFeedCapitalized == "STATION" ){
                 if( dataPair.second.size() == 1 ){
                     print_lines_on_station(network, dataPair.second.at(0));
                 }
