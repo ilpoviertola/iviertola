@@ -431,4 +431,7 @@ int main()
         }
 
     }
+    if(exit){
+        return EXIT_FAILURE;
+    }
 }
