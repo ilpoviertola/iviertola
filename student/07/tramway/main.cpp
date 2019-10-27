@@ -77,7 +77,6 @@ bool add_station(std::vector<std::string> parts, Network& network)
 bool read_file(Network& network)
 {
    int returnValue = 0;
-
     std::string inputFile = "";
 
     std::cout << "Give a name for input file: ";
@@ -91,7 +90,7 @@ bool read_file(Network& network)
             std::vector<std::string> parts = split( row, ';', false );
 
             // Row isn't in format: Line;Station
-            if( parts.size() < 2 ){
+            if( parts.size() != 2 ){
                 std::cout << "Error: Invalid format in file." << std::endl;
                 returnValue = EXIT_FAILURE;
                 break;
