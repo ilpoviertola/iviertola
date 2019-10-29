@@ -79,7 +79,7 @@ void print_data(const Student s) {
 bool is_valid_phone_number(const std::string number) {
     for(unsigned int i = 0; i < number.length(); ++i) {
         if(!(('0' <= number[i] && number[i] <= '9') || number[i] == ' ' || number[i] == '-')) {
-            std::cout << "Erroneuous phone number: " << number << std::endl << std::endl;
+            std::cout << "Erroneous phone number: " << number << std::endl << std::endl;
             return false;
         }
     }
@@ -121,9 +121,6 @@ void change_phone_number(std::string student_nmbr, std::string file_name,
                 tmp.clear();
                 fileObj << vts.str() << std::endl;
             }
-
-
-
             fileObj.close();
         }
     } else {
