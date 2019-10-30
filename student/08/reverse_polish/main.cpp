@@ -61,7 +61,7 @@ int main()
             ++operands;
         }
         else if( command == '-' ){
-            array[0] = (operations[1])(array[0], array[1]);
+            array[0] = (operations[1])(array[1], array[0]);
             array[1] = 0;
 
             for( int i = 1 ; i < 80 ; ++i ){
@@ -83,12 +83,12 @@ int main()
             ++operands;
         }
         else if( command == '/' ){
-            if( array[1] == 0 ){
+            if( array[0] == 0 ){
                 std::cout << "Error: Division by zero\n";
                 cont = false;
                 break;
             }
-            array[0] = (operations[3])(array[0], array[1]);
+            array[0] = (operations[3])(array[1], array[0]);
             array[1] = 0;
 
             for( int i = 1 ; i < 80 ; ++i ){
@@ -110,6 +110,7 @@ int main()
             break;
         }
     }
+
     if( cont ){
         if( nums <= operands ){
             std::cout << "Error: Too few operands\n";
