@@ -80,20 +80,22 @@ bool Cards::top_to_bottom(){
 }
 
 bool Cards::remove(int &id){
-    Card_data* toRemove = top_;
+    if( top_ != nullptr ){
+        Card_data* toRemove = top_;
 
-    id = toRemove->data;
+        id = toRemove->data;
 
-    if( top_ == bottom_ ){
-        top_ = nullptr;
-        bottom_ = nullptr;
-    } else {
-        top_ = top_->next;
-    }
+        if( top_ == bottom_ ){
+            top_ = nullptr;
+            bottom_ = nullptr;
+        } else {
+            top_ = top_->next;
+        }
 
-    delete toRemove;
+        delete toRemove;
 
-    return true;
+        return true;
+    } else { return false; }
 }
 
 void Cards::print_from_bottom_to_top(ostream &s){
