@@ -95,3 +95,7 @@ bool Cards::remove(int &id){
 
     return true;
 }
+
+void Cards::print_from_bottom_to_top(ostream &s){
+    s << "moro";
+}
