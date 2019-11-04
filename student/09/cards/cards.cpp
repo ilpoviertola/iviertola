@@ -99,5 +99,28 @@ bool Cards::remove(int &id){
 }
 
 void Cards::print_from_bottom_to_top(ostream &s){
-    s << "moro";
+    Card_data* toPrint = top_;
+    Card_data* asd = top_;
+    int number = 0;
+
+    while(asd != nullptr){
+        ++number;
+        asd = asd->next;
+    }
+
+    recursive_print(toPrint, s, number);
+
+
+}
+
+int Cards::recursive_print(Card_data *top, ostream &s, const int number){
+    if(top->next == nullptr){
+        s << number << ": " << top->data << "\n";
+    } else {
+        int new_number = number-1;
+        recursive_print(top->next, s, new_number);
+        s << number << ": " << top->data << "\n";
+    }
+
+    return 1;
 }

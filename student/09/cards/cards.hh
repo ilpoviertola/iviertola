@@ -47,7 +47,7 @@ class Cards {
 
       // You can use the function below in the implementation of
       // method print_from_bottom_to_top.
-      int recursive_print(Card_data* top, std::ostream& s);
+      int recursive_print(Card_data* top, std::ostream& s, const int number);
 };
 
 #endif // CARDS_HH
