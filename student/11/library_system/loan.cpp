@@ -1,7 +1,6 @@
 #include "loan.hh"
 
 #include <iostream>
-#include <memory>
 
 Loan::Loan(Date* day_loaned, Person* loaned_by, Book* loaned_book):
     day_loaned_(new Date(day_loaned->getDay(), day_loaned->getMonth(), day_loaned->getYear())),

@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include <algorithm>
 
 // Let's use the date when the project was published as the first date.
 Library::Library():
@@ -206,5 +207,30 @@ void Library::renew_loan(const std::string &book_title)
 
 void Library::return_loan(const std::string &book_title)
 {
+    bool has_been_loaned = false;
+    Loan* loan_to_return = nullptr;
 
+    if( books_.find(book_title) != books_.end() ){
+
+        for( Loan* loan : loans_ ){
+            if( loan->get_book()->get_title() == book_title ){
+                has_been_loaned = true;
+                loan_to_return = loan;
+                break;
+            }
+        }
+        if( has_been_loaned ){
+            std::cout << RETURN_SUCCESSFUL << std::endl;
+            // Itearor that searches the loan being removed from loans_ vector.
+            std::vector<Loan*>::iterator it =
+                    std::find(loans_.begin(), loans_.end(), loan_to_return);
+            loans_.erase(it);
+            delete loan_to_return;
+            loan_to_return = nullptr;
+        } else {
+            std::cout << LOAN_NOT_FOUND_ERROR << std::endl;
+        }
+    } else {
+        std::cout << CANT_FIND_BOOK_ERROR << std::endl;
+    }
 }

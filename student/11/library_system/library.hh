@@ -104,10 +104,11 @@ private:
     std::map<std::string, Person*> authors_;
     // All accounts of borrowers.
     std::map<std::string, Person*> accounts_;
-    // All borrowed books.
-    std::vector<Loan*> loans_;
 
     // Students may add things here and initialize them properly.
+
+    // All borrowed books.
+    std::vector<Loan*> loans_;
 
 };
 
