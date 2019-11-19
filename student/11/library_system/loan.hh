@@ -23,11 +23,13 @@ class Loan
 public:
 
     Loan(Date* day_loaned, Person* loaned_by, Book* loaned_book);
-    ~Loan();
 
     Book* get_book();
     Person* get_person();
     Date* get_date();
+    bool is_late(Date *today);
+
+    ~Loan();
 
 private:
 

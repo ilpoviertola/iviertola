@@ -20,3 +20,27 @@ Loan::~Loan()
     delete due_date_;
     due_date_ = nullptr;
 }
+
+Book* Loan::get_book()
+{
+    return loaned_book_;
+}
+
+Person* Loan::get_person()
+{
+    return loaned_by_;
+}
+
+Date* Loan::get_date()
+{
+    return due_date_;
+}
+
+bool Loan::is_late(Date* today)
+{
+    if( due_date_->operator <(*today) ){
+        return true;
+    } else {
+        return false;
+    }
+}

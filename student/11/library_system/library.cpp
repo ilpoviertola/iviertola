@@ -113,19 +113,57 @@ void Library::advance_date(int days)
 
 void Library::loaned_books()
 {
+    if( loans_.size() != 0 ){
+        std::cout << LOAN_INFO << std::endl;
 
+        for( Loan* loan : loans_ ){
+            std::cout << loan->get_book()->get_title() << " : "
+            << loan->get_person()->get_name() << " : "
+            << loan->get_date()->to_string() << " : ";
+            if(loan->is_late(today_)){
+               std::cout << "1" << std::endl;
+            } else { std::cout << "0" << std::endl; }
+        }
+    }
 }
 
 void Library::loans_by(const std::string &borrower)
 {
-
+    for( Loan* loan : loans_ ){
+        if(loan->get_person()->get_name() == borrower){
+            std::cout << loan->get_book()->get_title() << " : "
+            << loan->get_date()->to_string() << " : ";
+            if(loan->is_late(today_)){
+                std::cout << "1" << std::endl;
+            } else { std::cout << "0" << std::endl; }
+        }
+    }
 }
 
 void Library::loan(const std::string &book_title, const std::string &borrower_id)
 {
-    // ADD ERROR CHECKS!!
+    bool loaned = false;
 
-    Loan* n_loan = new Loan(today_, accounts_.at(borrower_id), books_.at(book_title));
+    for(Loan* loan : loans_){
+        if( loan->get_book()->get_title() == book_title ){
+            loaned = true;
+            std::cout << ALREADY_LOANED_ERROR << std::endl;
+            break;
+        }
+    }
+
+    if(not loaned){
+        if(books_.find(book_title) != books_.end()){
+            if(accounts_.find(borrower_id) != accounts_.end()){
+                    Loan* n_loan = new Loan(today_, accounts_.at(borrower_id), books_.at(book_title));
+                    loans_.push_back(n_loan);
+            } else {
+                std::cout << CANT_FIND_ACCOUNT_ERROR << std::endl;
+            }
+        } else {
+            std::cout << CANT_FIND_BOOK_ERROR<< std::endl;
+        }
+    }
 }
 
 void Library::renew_loan(const std::string &book_title)
