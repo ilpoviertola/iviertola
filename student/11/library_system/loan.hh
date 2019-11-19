@@ -28,6 +28,7 @@ public:
     Person* get_person();
     Date* get_date();
     bool is_late(Date *today);
+    bool renew_loan();
 
     ~Loan();
 

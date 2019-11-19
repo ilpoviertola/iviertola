@@ -44,3 +44,14 @@ bool Loan::is_late(Date* today)
         return false;
     }
 }
+
+bool Loan::renew_loan()
+{
+    if( renewals_left > 0 ){
+        due_date_->advance_by_loan_length();
+        --renewals_left;
+        return true;
+    } else {
+        return false;
+    }
+}

@@ -30,6 +30,10 @@ Library::~Library()
         delete account.second;
         account.second = nullptr;
     }
+    for( Loan* loan : loans_ ){
+        delete loan;
+        loan = nullptr;
+    }
 }
 
 void Library::all_books()
@@ -129,15 +133,18 @@ void Library::loaned_books()
 
 void Library::loans_by(const std::string &borrower)
 {
-    for( Loan* loan : loans_ ){
-        if(loan->get_person()->get_name() == borrower){
-            std::cout << loan->get_book()->get_title() << " : "
-            << loan->get_date()->to_string() << " : ";
-            if(loan->is_late(today_)){
-                std::cout << "1" << std::endl;
-            } else { std::cout << "0" << std::endl; }
+    if( accounts_.find(borrower) != accounts_.end() ){
+        for( Loan* loan : loans_ ){
+            if(loan->get_person()->get_name() == borrower){
+                std::cout << loan->get_book()->get_title() << " : "
+                << loan->get_date()->to_string() << " : ";
+                if(loan->is_late(today_)){
+                    std::cout << "1" << std::endl;
+                } else { std::cout << "0" << std::endl; }
+            }
         }
-    }
+    } else { std::cout << CANT_FIND_ACCOUNT_ERROR << std::endl; }
+
 }
 
 void Library::loan(const std::string &book_title, const std::string &borrower_id)
@@ -168,7 +175,33 @@ void Library::loan(const std::string &book_title, const std::string &borrower_id
 
 void Library::renew_loan(const std::string &book_title)
 {
+    bool has_been_loaned = false;
+    Loan* loan_to_renew = nullptr;
 
+    if( books_.find(book_title) != books_.end() ){
+
+        for( Loan* loan : loans_ ){
+            if( loan->get_book()->get_title() == book_title ){
+                has_been_loaned = true;
+                loan_to_renew = loan;
+                break;
+            }
+        }
+        if( has_been_loaned ){
+            if(loan_to_renew->renew_loan()){
+                std::cout << RENEWAL_SUCCESSFUL
+                << loan_to_renew->get_date()->to_string() << std::endl;
+                loan_to_renew = nullptr;
+            } else {
+                std::cout << OUT_OF_RENEWALS_ERROR << std::endl;
+                loan_to_renew = nullptr;
+            }
+        } else {
+            std::cout << LOAN_NOT_FOUND_ERROR << std::endl;
+        }
+    } else {
+        std::cout << CANT_FIND_BOOK_ERROR << std::endl;
+    }
 }
 
 void Library::return_loan(const std::string &book_title)
