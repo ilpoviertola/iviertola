@@ -1,3 +1,16 @@
+/* Source file for library module.
+ *
+ * Contains the functions that user activates with his/hers
+ * input.
+ *
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
+ * */
+
 #include "library.hh"
 #include "loan.hh"
 
@@ -163,7 +176,8 @@ void Library::loan(const std::string &book_title, const std::string &borrower_id
     if(not loaned){
         if(books_.find(book_title) != books_.end()){
             if(accounts_.find(borrower_id) != accounts_.end()){
-                    Loan* n_loan = new Loan(today_, accounts_.at(borrower_id), books_.at(book_title));
+                    Loan* n_loan = new Loan
+                            (today_, accounts_.at(borrower_id), books_.at(book_title));
                     loans_.push_back(n_loan);
             } else {
                 std::cout << CANT_FIND_ACCOUNT_ERROR << std::endl;

@@ -1,3 +1,16 @@
+/* Source file for loan module.
+ *
+ * Contains little functions that help handling the loan
+ * in the library.cpp file.
+ *
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
+ * */
+
 #include "loan.hh"
 
 #include <iostream>

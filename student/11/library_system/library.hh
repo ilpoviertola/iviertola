@@ -4,9 +4,15 @@
  * Students should expand this system to handle book loaning as well.
  * ---------------
  *
+ * Library model takes care of biggest functions that can be performed.
+ * Although other modules include a lots of helping functions.
+ * Functions are explained in the header files.
  *
- * (Add your info ( name, email, student number) and a short
- * description / comment of your solution here.)
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
  *
  *
  * ---------------

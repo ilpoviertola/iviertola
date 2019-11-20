@@ -1,8 +1,17 @@
 /* Module: Loan
  * ------------
- * This class and its bahaviour should be defined by the student.
  *
- * TIE-0220x S2019
+ * Takes care of loaning. Each loan is it's own object with data when the loan
+ * was taken, when it should be returned or renewed, who loaned it, what is the
+ * book that was loaned and how many times the person who loaned it can renew
+ * the loan.
+ *
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
  * */
 #ifndef LOAN_HH
 #define LOAN_HH
