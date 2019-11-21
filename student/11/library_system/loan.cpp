@@ -48,15 +48,6 @@ Date* Loan::get_date()
     return due_date_;
 }
 
-bool Loan::is_late(Date* today)
-{
-    if( due_date_->operator <(*today) ){
-        return true;
-    } else {
-        return false;
-    }
-}
-
 bool Loan::renew_loan()
 {
     if( renewals_left > 0 ){

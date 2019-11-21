@@ -36,9 +36,7 @@ public:
     // Getters.
     Book* get_book();
     Person* get_person();
-    Date* get_date();    
-    // Checks if the book is late. Returns true if the book is late.
-    bool is_late(Date *today);
+    Date* get_date();
     // Renews the loan so moves due date forward one loan period,
     // if there is renewals left. Returns true if the renewal is succesful.
     bool renew_loan();

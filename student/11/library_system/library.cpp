@@ -137,10 +137,8 @@ void Library::loaned_books()
         for( Loan* loan : loans_ ){
             std::cout << loan->get_book()->get_title() << " : "
             << loan->get_person()->get_name() << " : "
-            << loan->get_date()->to_string() << " : ";
-            if(loan->is_late(today_)){
-               std::cout << "1" << std::endl;
-            } else { std::cout << "0" << std::endl; }
+            << loan->get_date()->to_string() << " : "<<
+            loan->get_date()->operator <(*today_) << std::endl;
         }
     }
 }
@@ -151,10 +149,8 @@ void Library::loans_by(const std::string &borrower)
         for( Loan* loan : loans_ ){
             if(loan->get_person()->get_name() == borrower){
                 std::cout << loan->get_book()->get_title() << " : "
-                << loan->get_date()->to_string() << " : ";
-                if(loan->is_late(today_)){
-                    std::cout << "1" << std::endl;
-                } else { std::cout << "0" << std::endl; }
+                << loan->get_date()->to_string() << " : " <<
+                loan->get_date()->operator <(*today_) << std::endl;
             }
         }
     } else { std::cout << CANT_FIND_ACCOUNT_ERROR << std::endl; }
