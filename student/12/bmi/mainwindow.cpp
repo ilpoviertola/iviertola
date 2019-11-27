@@ -34,7 +34,7 @@ void MainWindow::calculate_bmi()
         if( bmi > 0 && bmi <= 18.5 ){
             ui->infoTextBrowser->append(QString::fromStdString("You are underweight."));
         } else if ( bmi > 18.5 && bmi < 25 ){
-            ui->infoTextBrowser->append(QString::fromStdString("You are normal weight."));
+            ui->infoTextBrowser->append(QString::fromStdString("Your weight is normal."));
         } else if ( bmi >= 25 ){
             ui->infoTextBrowser->append(QString::fromStdString("You are overweight."));
         }
