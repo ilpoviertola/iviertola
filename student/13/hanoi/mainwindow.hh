@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QGraphicsRectItem>
 
-const int DISK_AMOUNT = 10;
+const int DISK_AMOUNT = 2;
 
 namespace Ui {
 class MainWindow;
@@ -25,6 +25,8 @@ public:
 
     void setup_gameboard();
     void start_clock();
+    void disable_moves(bool all);
+    void enable_moves(bool all);
 
 private slots:
     void start_animation();
@@ -48,6 +50,7 @@ private:
 
     int x_left_;
     int y_left_;
+    int rise_left_;
 
     QTimer timer_;
     QGraphicsScene* scene_;

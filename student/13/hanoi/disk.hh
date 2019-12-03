@@ -7,21 +7,24 @@
 class Disk
 {
 public:
-    Disk(QGraphicsRectItem* disk, int width, int x, int y);
+    Disk(QGraphicsRectItem* disk, int width, int height, int x, int y);
 
     // Getters.
     QGraphicsRectItem* get_disk();
     int get_peg();
     int get_width();
+    int get_height();
     int get_x();
     int get_y();
 
-    int change_peg();
+    void change_peg(int peg);
+    void new_coords(int x, int y);
 
 private:
     QGraphicsRectItem* disk_;
 
     int width_;
+    int height_;
     int x_;
     int y_;
     int peg_;

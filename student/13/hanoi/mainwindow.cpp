@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
+#include <iostream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -79,7 +80,7 @@ void MainWindow::setup_gameboard()
     //Create as many disks as wanted.
     for( int i = 0; i < DISK_AMOUNT; ++i){
         QGraphicsRectItem* disk = scene_->addRect(disk_x, disk_y, disk_width, disk_height, black_pen, green_brush);
-        Disk* new_disk = new Disk(disk, disk_width, disk_x, disk_y);
+        Disk* new_disk = new Disk(disk, disk_width, disk_height, disk_x, disk_y);
         peg_A_.push_back(new_disk);
         disk_y -= disk_height;
         disk_x += 10;
@@ -117,31 +118,94 @@ void MainWindow::new_game()
 
 void MainWindow::start_animation()
 {
-    if(x_left_ != 0){
-        disk_to_move_->get_disk()->moveBy(STEP, 0);
-        x_left_ -= STEP;
+    qDebug() << x_left_ << " " << y_left_;
+    // Rising the disk first upwards.
+    if( rise_left_ != 0){
+        disk_to_move_->get_disk()->moveBy(0, -STEP);
+        rise_left_ -= STEP;
     }
+    // Moving the disk over the right peg.
+    else if(x_left_ != 0){
+        if(x_left_ > 0){
+            disk_to_move_->get_disk()->moveBy(STEP, 0);
+            x_left_ -= STEP;
+        } else {
+            disk_to_move_->get_disk()->moveBy(-STEP, 0);
+            x_left_ += STEP;
+        }
+    }
+    // Lowering the disk on the correct height.
     else if(y_left_ != 0){
-        disk_to_move_->get_disk()->moveBy(0, STEP);
-        y_left_ -= STEP;
+        if(y_left_ > 0){
+            disk_to_move_->get_disk()->moveBy(0, STEP);
+            y_left_ -= STEP;
+        } else {
+            disk_to_move_->get_disk()->moveBy(0, -STEP);
+            y_left_ += STEP;
+        }
     }
+    // The disk is in the right place.
     else if(x_left_ == 0 && y_left_ == 0){
+        enable_moves(true);
         timer_.stop();
+        qDebug() << "NEW:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
     }
 }
 
-void MainWindow::start_clock()
+void MainWindow::disable_moves(bool all)
 {
-    timer_.start(200);
+    if(all){
+        ui_->AtoBbutton->setDisabled(true);
+        ui_->AtoCbutton->setDisabled(true);
+        ui_->BtoAbutton->setDisabled(true);
+        ui_->BtoCbutton->setDisabled(true);
+        ui_->CtoAbutton->setDisabled(true);
+        ui_->CtoBbutton->setDisabled(true);
+        ui_->newGameButton->setDisabled(true);
+    }
+    else {
+
+    }
+}
+
+void MainWindow::enable_moves(bool all)
+{
+    if(all){
+        ui_->AtoBbutton->setEnabled(true);
+        ui_->AtoCbutton->setEnabled(true);
+        ui_->BtoAbutton->setEnabled(true);
+        ui_->BtoCbutton->setEnabled(true);
+        ui_->CtoAbutton->setEnabled(true);
+        ui_->CtoBbutton->setEnabled(true);
+        ui_->newGameButton->setEnabled(true);
+    }
+
 }
 
 void MainWindow::A_to_B()
 {
+    disable_moves(true);
+
     disk_to_move_ = peg_A_.back();
     x_left_ = 170;
-    y_left_ = 50;
-    start_clock();
+    y_left_ = 230 - disk_to_move_->get_height()*peg_B_.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
 
-//    peg_A_.back()->get_disk()->moveBy(170, 0);
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
 
+    // Setting new coordiantes for disk object.
+    if(peg_B_.size() == 0){
+        int distance_between_new_and_old_y = 240 - disk_to_move_->get_y();
+        disk_to_move_->change_peg(1);
+        disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
+    } else {
+        int distance_between_new_and_old_y = peg_B_.back()->get_y() - disk_to_move_->get_y() - 10;
+        disk_to_move_->change_peg(1);
+        disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
+    }
+
+    peg_A_.pop_back();
+    peg_B_.push_back(disk_to_move_);
+
+    timer_.start(100);
 }
