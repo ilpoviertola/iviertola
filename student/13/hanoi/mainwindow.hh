@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QGraphicsRectItem>
 
-const int DISK_AMOUNT = 2;
+const int DISK_AMOUNT = 6;
 
 namespace Ui {
 class MainWindow;

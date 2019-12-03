@@ -91,6 +91,7 @@ void MainWindow::setup_gameboard()
 void MainWindow::new_game()
 {
     scene_->clear();
+    enable_moves(true);
 
     for( Disk* disk : peg_A_ ){
         delete disk;
@@ -147,6 +148,7 @@ void MainWindow::start_animation()
     // The disk is in the right place.
     else if(x_left_ == 0 && y_left_ == 0){
         enable_moves(true);
+        disable_moves(false);
         timer_.stop();
         qDebug() << "NEW:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
     }
@@ -164,7 +166,31 @@ void MainWindow::disable_moves(bool all)
         ui_->newGameButton->setDisabled(true);
     }
     else {
+        Disk* top_on_peg_A = peg_A_.back();
+        Disk* top_on_peg_B = peg_B_.back();
+        Disk* top_on_peg_C = peg_C_.back();
 
+//        if(peg_A_.size() > 0){
+//            top_on_peg_A = peg_A_.back();
+//        } if(peg_B_.size() > 0){
+//            top_on_peg_B = peg_B_.back();
+//        } if(peg_C_.size() > 0){
+//            top_on_peg_C = peg_C_.back();
+//        }
+
+        if(top_on_peg_A->get_width() > top_on_peg_B->get_width()){
+            ui_->AtoBbutton->setDisabled(true);
+        } else {
+            ui_->BtoAbutton->setDisabled(true);
+//        } if(top_on_peg_A->get_width() > top_on_peg_C->get_width()){
+//            ui_->AtoCbutton->setDisabled(true);
+//        } else {
+//            ui_->CtoAbutton->setDisabled(true);
+//        } if(top_on_peg_B->get_width() > top_on_peg_C->get_width()){
+//            ui_->BtoCbutton->setDisabled(true);
+//        } else {
+//            ui_->CtoBbutton->setDisabled(true);
+        }
     }
 }
 
@@ -179,7 +205,6 @@ void MainWindow::enable_moves(bool all)
         ui_->CtoBbutton->setEnabled(true);
         ui_->newGameButton->setEnabled(true);
     }
-
 }
 
 void MainWindow::A_to_B()
