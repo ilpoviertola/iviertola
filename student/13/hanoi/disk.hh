@@ -10,7 +10,7 @@ public:
     Disk(QGraphicsRectItem* disk, int width, int x, int y);
 
     // Getters.
-    QGraphicsRectItem get_disk();
+    QGraphicsRectItem* get_disk();
     int get_peg();
     int get_width();
     int get_x();

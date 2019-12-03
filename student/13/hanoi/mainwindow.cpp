@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // at the following coordinates:
     int left_margin = 10; // x coordinate
     int top_margin = 270; // y coordinate
+
     // The width of the graphicsView is BORDER_RIGHT added by 2,
     // since the borders take one pixel on each side
     // (1 on the left, and 1 on the right).
@@ -29,11 +30,27 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&timer_, &QTimer::timeout, this, &MainWindow::start_animation);
     connect(ui_->newGameButton, SIGNAL(clicked(bool)), this, SLOT(new_game()));
+    connect(ui_->AtoBbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_B()));
 }
 
 MainWindow::~MainWindow()
 {
     delete ui_;
+
+    for( Disk* disk : peg_A_ ){
+        delete disk;
+        disk = nullptr;
+    }
+
+    for( Disk* disk : peg_B_ ){
+        delete disk;
+        disk = nullptr;
+    }
+
+    for( Disk* disk : peg_C_ ){
+        delete disk;
+        disk = nullptr;
+    }
 }
 
 void MainWindow::setup_gameboard()
@@ -56,15 +73,14 @@ void MainWindow::setup_gameboard()
 
     // Create pegs.
     for( int i = 1; i < 4; ++i ){
-        QGraphicsRectItem* peg = scene_->addRect(( i * (BORDER_RIGHT / 4) ) - ( peg_width / 2 ) , 30, peg_width, peg_height, yellow_pen, black_brush);
-        pegs_.push_back(peg);
+        scene_->addRect(( i * (BORDER_RIGHT / 4) ) - ( peg_width / 2 ) , 30, peg_width, peg_height, yellow_pen, black_brush);
     }
 
     //Create as many disks as wanted.
     for( int i = 0; i < DISK_AMOUNT; ++i){
         QGraphicsRectItem* disk = scene_->addRect(disk_x, disk_y, disk_width, disk_height, black_pen, green_brush);
         Disk* new_disk = new Disk(disk, disk_width, disk_x, disk_y);
-        disks_.push_back(new_disk);
+        peg_A_.push_back(new_disk);
         disk_y -= disk_height;
         disk_x += 10;
         disk_width -= 20;
@@ -73,10 +89,59 @@ void MainWindow::setup_gameboard()
 
 void MainWindow::new_game()
 {
+    scene_->clear();
+
+    for( Disk* disk : peg_A_ ){
+        delete disk;
+        disk = nullptr;
+    }
+
+    peg_A_.clear();
+
+    for( Disk* disk : peg_B_ ){
+        delete disk;
+        disk = nullptr;
+    }
+
+    peg_B_.clear();
+
+    for( Disk* disk : peg_C_ ){
+        delete disk;
+        disk = nullptr;
+    }
+
+    peg_C_.clear();
+
     setup_gameboard();
 }
 
 void MainWindow::start_animation()
 {
+    if(x_left_ != 0){
+        disk_to_move_->get_disk()->moveBy(STEP, 0);
+        x_left_ -= STEP;
+    }
+    else if(y_left_ != 0){
+        disk_to_move_->get_disk()->moveBy(0, STEP);
+        y_left_ -= STEP;
+    }
+    else if(x_left_ == 0 && y_left_ == 0){
+        timer_.stop();
+    }
+}
+
+void MainWindow::start_clock()
+{
+    timer_.start(200);
+}
+
+void MainWindow::A_to_B()
+{
+    disk_to_move_ = peg_A_.back();
+    x_left_ = 170;
+    y_left_ = 50;
+    start_clock();
+
+//    peg_A_.back()->get_disk()->moveBy(170, 0);
 
 }
