@@ -227,39 +227,59 @@ void MainWindow::enable_moves()
     ui_->newGameButton->setEnabled(true);
 }
 
-void MainWindow::change_coords(char from, char to)
+void MainWindow::move_disk(char from, char to)
 {
     std::vector<Disk*> move_to_peg = {};
     int new_peg_number = 0;
 
-    if(from == 'A'){
+    if(from == 'A' && peg_A_.size() != 0){
+        disk_to_move_ = peg_A_.back();
         if(to == 'B'){
             move_to_peg = peg_B_;
             new_peg_number = 1;
+            x_left_ = 170;
         } else {
             move_to_peg = peg_C_;
             new_peg_number = 2;
+            x_left_ = 340;
         }
     }
-    else if(from == 'B'){
+    else if(from == 'B' && peg_B_.size() != 0){
+        disk_to_move_ = peg_B_.back();
         if(to == 'A'){
             move_to_peg = peg_A_;
             new_peg_number = 0;
+            x_left_ = -170;
         } else {
             move_to_peg = peg_C_;
             new_peg_number = 2;
+            x_left_ = 170;
         }
     }
-    else {
+    else if(from == 'C' && peg_C_.size() != 0){
+        disk_to_move_ = peg_C_.back();
         if(to == 'A'){
             move_to_peg = peg_A_;
             new_peg_number = 0;
+            x_left_ = -340;
         } else {
             move_to_peg = peg_B_;
             new_peg_number = 1;
+            x_left_ = -170;
         }
+    } else {
+        return;
     }
 
+    disable_moves(true);
+
+    int old_peg_number = disk_to_move_->get_peg();
+    y_left_ = 230 - disk_to_move_->get_height()*move_to_peg.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
+
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+
+    // Setting new coordiantes for disk object.
     if(move_to_peg.size() == 0){
         int distance_between_new_and_old_y = 240 - disk_to_move_->get_y();
         disk_to_move_->change_peg(new_peg_number);
@@ -269,124 +289,44 @@ void MainWindow::change_coords(char from, char to)
         disk_to_move_->change_peg(new_peg_number);
         disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
     }
+
+    if(old_peg_number == 0){peg_A_.pop_back();}
+    else if(old_peg_number == 1){peg_B_.pop_back();}
+    else{peg_C_.pop_back();}
+
+    if(new_peg_number == 0){peg_A_.push_back(disk_to_move_); qDebug() << "A";}
+    else if(new_peg_number == 1){peg_B_.push_back(disk_to_move_); qDebug() << "B";}
+    else{peg_C_.push_back(disk_to_move_); qDebug() << "C";}
+
+    animate_timer_.start(100);
 }
 
 void MainWindow::A_to_B()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_A_.back();
-    x_left_ = 170;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_B_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('A', 'B');
-
-    peg_A_.pop_back();
-    peg_B_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+      move_disk('A', 'B');
 }
 
 void MainWindow::A_to_C()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_A_.back();
-    x_left_ = 340;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_C_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('A', 'C');
-
-    peg_A_.pop_back();
-    peg_C_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+    move_disk('A', 'C');
 }
 
 void MainWindow::B_to_A()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_B_.back();
-    x_left_ = -170;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_A_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('B', 'C');
-
-    peg_B_.pop_back();
-    peg_A_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+    move_disk('B', 'A');
 }
 
 void MainWindow::B_to_C()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_B_.back();
-    x_left_ = 170;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_C_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('B', 'C');
-
-    peg_B_.pop_back();
-    peg_C_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+    move_disk('B', 'C');
 }
 
 void MainWindow::C_to_A()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_C_.back();
-    x_left_ = -340;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_A_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('B', 'C');
-
-    peg_C_.pop_back();
-    peg_A_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+    move_disk('C', 'A');
 }
 
 void MainWindow::C_to_B()
 {
-    disable_moves(true);
-
-    disk_to_move_ = peg_C_.back();
-    x_left_ = -170;
-    y_left_ = 230 - disk_to_move_->get_height()*peg_B_.size();
-    rise_left_ = disk_to_move_->get_y() - 10;
-
-    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
-    // Setting new coordiantes for disk object.
-    change_coords('B', 'C');
-
-    peg_C_.pop_back();
-    peg_B_.push_back(disk_to_move_);
-
-    animate_timer_.start(100);
+    move_disk('C', 'B');
 }

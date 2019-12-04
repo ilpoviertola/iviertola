@@ -26,7 +26,7 @@ public:
     void setup_gameboard();
     void disable_moves(bool all);
     void enable_moves();
-    void change_coords(char from, char to);
+    void move_disk(char from, char to);
 
 private slots:
     void start_animation();

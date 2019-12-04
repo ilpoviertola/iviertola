@@ -9,6 +9,11 @@ QGraphicsRectItem* Disk::get_disk()
     return disk_;
 }
 
+int Disk::get_peg()
+{
+    return peg_;
+}
+
 int Disk::get_width()
 {
     return width_;
