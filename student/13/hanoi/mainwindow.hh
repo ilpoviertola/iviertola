@@ -9,7 +9,7 @@
 #include <QTimer>
 #include <QGraphicsRectItem>
 
-const int DISK_AMOUNT = 6;
+const int DISK_AMOUNT = 2;
 
 namespace Ui {
 class MainWindow;
@@ -27,6 +27,7 @@ public:
     void disable_moves(bool all);
     void enable_moves();
     void move_disk(char from, char to);
+    bool has_won();
 
 private slots:
     void start_animation();

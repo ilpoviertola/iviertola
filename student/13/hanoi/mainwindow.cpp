@@ -95,6 +95,7 @@ void MainWindow::setup_gameboard()
 void MainWindow::new_game()
 {
     scene_->clear();
+    ui_->textBrowser->clear();
     enable_moves();
 
     for( Disk* disk : peg_A_ ){
@@ -148,10 +149,14 @@ void MainWindow::start_animation()
     }
     // The disk is in the right place.
     else if(x_left_ == 0 && y_left_ == 0){
-        enable_moves();
-        disable_moves(false);
-        animate_timer_.stop();
-        qDebug() << "NEW:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+        if(not has_won()){
+            enable_moves();
+            disable_moves(false);
+            animate_timer_.stop();
+            qDebug() << "NEW:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+        } else {
+            animate_timer_.stop();
+        }
     }
 }
 
@@ -232,54 +237,67 @@ void MainWindow::move_disk(char from, char to)
     std::vector<Disk*> move_to_peg = {};
     int new_peg_number = 0;
 
+    // User wants to move disk from peg A to B or C naturally.
     if(from == 'A' && peg_A_.size() != 0){
         disk_to_move_ = peg_A_.back();
         if(to == 'B'){
             move_to_peg = peg_B_;
             new_peg_number = 1;
             x_left_ = 170;
+            ui_->textBrowser->append(QString::fromStdString("From A to B!"));
         } else {
             move_to_peg = peg_C_;
             new_peg_number = 2;
             x_left_ = 340;
+            ui_->textBrowser->append(QString::fromStdString("From A to C!"));
         }
     }
+    // User wants to move disk from peg B to A or C naturally.
     else if(from == 'B' && peg_B_.size() != 0){
         disk_to_move_ = peg_B_.back();
         if(to == 'A'){
             move_to_peg = peg_A_;
             new_peg_number = 0;
             x_left_ = -170;
+            ui_->textBrowser->append(QString::fromStdString("From B to A!"));
         } else {
             move_to_peg = peg_C_;
             new_peg_number = 2;
             x_left_ = 170;
+            ui_->textBrowser->append(QString::fromStdString("From B to C!"));
         }
     }
+    // User wants to move disk from peg C to A or B naturally.
     else if(from == 'C' && peg_C_.size() != 0){
         disk_to_move_ = peg_C_.back();
         if(to == 'A'){
             move_to_peg = peg_A_;
             new_peg_number = 0;
             x_left_ = -340;
+            ui_->textBrowser->append(QString::fromStdString("From C to A!"));
         } else {
             move_to_peg = peg_B_;
             new_peg_number = 1;
             x_left_ = -170;
+            ui_->textBrowser->append(QString::fromStdString("From C to B!"));
         }
+    // User wants to move disk from the peg where isn't any disks. Nothing happens.
     } else {
+        ui_->textBrowser->append(QString::fromStdString("Misclick!"));
         return;
     }
 
+    // Disable buttons so user can't cause bugs during animation.
     disable_moves(true);
 
+    // old_peg_number tells where the disk is moved from.
     int old_peg_number = disk_to_move_->get_peg();
     y_left_ = 230 - disk_to_move_->get_height()*move_to_peg.size();
     rise_left_ = disk_to_move_->get_y() - 10;
 
     qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
 
-    // Setting new coordiantes for disk object.
+    // Setting new coordiantes and peg for disk object.
     if(move_to_peg.size() == 0){
         int distance_between_new_and_old_y = 240 - disk_to_move_->get_y();
         disk_to_move_->change_peg(new_peg_number);
@@ -290,15 +308,31 @@ void MainWindow::move_disk(char from, char to)
         disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
     }
 
+    // old_peg_number tells from which peg to delete the disk on the top.
     if(old_peg_number == 0){peg_A_.pop_back();}
     else if(old_peg_number == 1){peg_B_.pop_back();}
     else{peg_C_.pop_back();}
 
-    if(new_peg_number == 0){peg_A_.push_back(disk_to_move_); qDebug() << "A";}
-    else if(new_peg_number == 1){peg_B_.push_back(disk_to_move_); qDebug() << "B";}
-    else{peg_C_.push_back(disk_to_move_); qDebug() << "C";}
+    // new_peg_number tell to which peg to add new disk to the top.
+    if(new_peg_number == 0){peg_A_.push_back(disk_to_move_);}
+    else if(new_peg_number == 1){peg_B_.push_back(disk_to_move_);}
+    else{peg_C_.push_back(disk_to_move_);}
 
+    // Just in case.
+    move_to_peg.clear();
+
+    // Start animation.
     animate_timer_.start(100);
+}
+
+bool MainWindow::has_won()
+{
+    if(peg_B_.size() == DISK_AMOUNT|| peg_C_.size() == DISK_AMOUNT){
+        ui_->textBrowser->append(QString::fromStdString("You won! Let's play another one."));
+        disable_moves(true);
+        ui_->newGameButton->setEnabled(true);
+        return true;
+    } else { return false; }
 }
 
 void MainWindow::A_to_B()
