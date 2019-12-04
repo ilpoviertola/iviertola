@@ -24,14 +24,15 @@ public:
     ~MainWindow();
 
     void setup_gameboard();
-    void start_clock();
     void disable_moves(bool all);
-    void enable_moves(bool all);
+    void enable_moves();
+
 
 private slots:
     void start_animation();
     void new_game();
     void A_to_B();
+    void B_to_C();
 
 private:
     Ui::MainWindow *ui_;
@@ -52,7 +53,7 @@ private:
     int y_left_;
     int rise_left_;
 
-    QTimer timer_;
+    QTimer animate_timer_;
     QGraphicsScene* scene_;
 };
 

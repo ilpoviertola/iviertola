@@ -29,9 +29,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     setup_gameboard();
 
-    connect(&timer_, &QTimer::timeout, this, &MainWindow::start_animation);
+    connect(&animate_timer_, &QTimer::timeout, this, &MainWindow::start_animation);
     connect(ui_->newGameButton, SIGNAL(clicked(bool)), this, SLOT(new_game()));
     connect(ui_->AtoBbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_B()));
+    connect(ui_->BtoCbutton, SIGNAL(clicked(bool)), this, SLOT(B_to_C()));
 }
 
 MainWindow::~MainWindow()
@@ -83,35 +84,32 @@ void MainWindow::setup_gameboard()
         Disk* new_disk = new Disk(disk, disk_width, disk_height, disk_x, disk_y);
         peg_A_.push_back(new_disk);
         disk_y -= disk_height;
-        disk_x += 10;
-        disk_width -= 20;
+        disk_x += (disk_width/(DISK_AMOUNT - i)) / 2;
+        disk_width -= disk_width/(DISK_AMOUNT - i);
     }
 }
 
 void MainWindow::new_game()
 {
     scene_->clear();
-    enable_moves(true);
+    enable_moves();
 
     for( Disk* disk : peg_A_ ){
         delete disk;
         disk = nullptr;
     }
-
     peg_A_.clear();
 
     for( Disk* disk : peg_B_ ){
         delete disk;
         disk = nullptr;
     }
-
     peg_B_.clear();
 
     for( Disk* disk : peg_C_ ){
         delete disk;
         disk = nullptr;
     }
-
     peg_C_.clear();
 
     setup_gameboard();
@@ -147,9 +145,9 @@ void MainWindow::start_animation()
     }
     // The disk is in the right place.
     else if(x_left_ == 0 && y_left_ == 0){
-        enable_moves(true);
+        enable_moves();
         disable_moves(false);
-        timer_.stop();
+        animate_timer_.stop();
         qDebug() << "NEW:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
     }
 }
@@ -166,45 +164,64 @@ void MainWindow::disable_moves(bool all)
         ui_->newGameButton->setDisabled(true);
     }
     else {
-        Disk* top_on_peg_A = peg_A_.back();
-        Disk* top_on_peg_B = peg_B_.back();
-        Disk* top_on_peg_C = peg_C_.back();
+        Disk* top_on_peg_A = nullptr;
+        Disk* top_on_peg_B = nullptr;
+        Disk* top_on_peg_C = nullptr;
 
-//        if(peg_A_.size() > 0){
-//            top_on_peg_A = peg_A_.back();
-//        } if(peg_B_.size() > 0){
-//            top_on_peg_B = peg_B_.back();
-//        } if(peg_C_.size() > 0){
-//            top_on_peg_C = peg_C_.back();
-//        }
+        if(peg_A_.size() != 0 && peg_B_.size() != 0){
+            top_on_peg_A = peg_A_.back();
+            top_on_peg_B = peg_B_.back();
 
-        if(top_on_peg_A->get_width() > top_on_peg_B->get_width()){
-            ui_->AtoBbutton->setDisabled(true);
-        } else {
-            ui_->BtoAbutton->setDisabled(true);
-//        } if(top_on_peg_A->get_width() > top_on_peg_C->get_width()){
-//            ui_->AtoCbutton->setDisabled(true);
-//        } else {
-//            ui_->CtoAbutton->setDisabled(true);
-//        } if(top_on_peg_B->get_width() > top_on_peg_C->get_width()){
-//            ui_->BtoCbutton->setDisabled(true);
-//        } else {
-//            ui_->CtoBbutton->setDisabled(true);
+            if(top_on_peg_A->get_width() > top_on_peg_B->get_width()){
+                ui_->AtoBbutton->setDisabled(true);
+            }
+            if(top_on_peg_A->get_width() < top_on_peg_B->get_width()){
+                ui_->BtoAbutton->setDisabled(true);
+            }
+
+            top_on_peg_A = nullptr;
+            top_on_peg_B = nullptr;
+        }
+        if(peg_A_.size() != 0 && peg_C_.size() != 0){
+            top_on_peg_A = peg_A_.back();
+            top_on_peg_C = peg_C_.back();
+
+            if(top_on_peg_A->get_width() > top_on_peg_C->get_width()){
+                ui_->AtoCbutton->setDisabled(true);
+            }
+            if(top_on_peg_A->get_width() < top_on_peg_C->get_width()){
+                ui_->CtoAbutton->setDisabled(true);
+            }
+
+            top_on_peg_A = nullptr;
+            top_on_peg_C = nullptr;
+        }
+        if(peg_B_.size() != 0 && peg_C_.size() != 0){
+            top_on_peg_B = peg_B_.back();
+            top_on_peg_C = peg_C_.back();
+
+            if(top_on_peg_B->get_width() > top_on_peg_C->get_width()){
+                ui_->BtoCbutton->setDisabled(true);
+            }
+            if(top_on_peg_B->get_width() < top_on_peg_C->get_width()){
+                ui_->CtoBbutton->setDisabled(true);
+            }
+
+            top_on_peg_B = nullptr;
+            top_on_peg_C = nullptr;
         }
     }
 }
 
-void MainWindow::enable_moves(bool all)
+void MainWindow::enable_moves()
 {
-    if(all){
-        ui_->AtoBbutton->setEnabled(true);
-        ui_->AtoCbutton->setEnabled(true);
-        ui_->BtoAbutton->setEnabled(true);
-        ui_->BtoCbutton->setEnabled(true);
-        ui_->CtoAbutton->setEnabled(true);
-        ui_->CtoBbutton->setEnabled(true);
-        ui_->newGameButton->setEnabled(true);
-    }
+    ui_->AtoBbutton->setEnabled(true);
+    ui_->AtoCbutton->setEnabled(true);
+    ui_->BtoAbutton->setEnabled(true);
+    ui_->BtoCbutton->setEnabled(true);
+    ui_->CtoAbutton->setEnabled(true);
+    ui_->CtoBbutton->setEnabled(true);
+    ui_->newGameButton->setEnabled(true);
 }
 
 void MainWindow::A_to_B()
@@ -232,5 +249,33 @@ void MainWindow::A_to_B()
     peg_A_.pop_back();
     peg_B_.push_back(disk_to_move_);
 
-    timer_.start(100);
+    animate_timer_.start(100);
+}
+
+void MainWindow::B_to_C()
+{
+    disable_moves(true);
+
+    disk_to_move_ = peg_B_.back();
+    x_left_ = 170;
+    y_left_ = 230 - disk_to_move_->get_height()*peg_C_.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
+
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+
+    // Setting new coordiantes for disk object.
+    if(peg_C_.size() == 0){
+        int distance_between_new_and_old_y = 240 - disk_to_move_->get_y();
+        disk_to_move_->change_peg(1);
+        disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
+    } else {
+        int distance_between_new_and_old_y = peg_C_.back()->get_y() - disk_to_move_->get_y() - 10;
+        disk_to_move_->change_peg(1);
+        disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
+    }
+
+    peg_B_.pop_back();
+    peg_C_.push_back(disk_to_move_);
+
+    animate_timer_.start(100);
 }
