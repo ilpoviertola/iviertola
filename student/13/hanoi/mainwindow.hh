@@ -26,13 +26,17 @@ public:
     void setup_gameboard();
     void disable_moves(bool all);
     void enable_moves();
-
+    void change_coords(char from, char to);
 
 private slots:
     void start_animation();
     void new_game();
     void A_to_B();
+    void A_to_C();
+    void B_to_A();
     void B_to_C();
+    void C_to_A();
+    void C_to_B();
 
 private:
     Ui::MainWindow *ui_;
