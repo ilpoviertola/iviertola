@@ -32,7 +32,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui_->newGameButton, SIGNAL(clicked(bool)), this, SLOT(new_game()));
     connect(ui_->AtoBbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_B()));
     connect(ui_->AtoCbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_C()));
+    connect(ui_->BtoAbutton, SIGNAL(clicked(bool)), this, SLOT(B_to_A()));
     connect(ui_->BtoCbutton, SIGNAL(clicked(bool)), this, SLOT(B_to_C()));
+    connect(ui_->CtoAbutton, SIGNAL(clicked(bool)), this, SLOT(C_to_A()));
+    connect(ui_->CtoBbutton, SIGNAL(clicked(bool)), this, SLOT(C_to_B()));
 }
 
 MainWindow::~MainWindow()
@@ -310,7 +313,22 @@ void MainWindow::A_to_C()
 
 void MainWindow::B_to_A()
 {
+    disable_moves(true);
 
+    disk_to_move_ = peg_B_.back();
+    x_left_ = -170;
+    y_left_ = 230 - disk_to_move_->get_height()*peg_A_.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
+
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+
+    // Setting new coordiantes for disk object.
+    change_coords('B', 'C');
+
+    peg_B_.pop_back();
+    peg_A_.push_back(disk_to_move_);
+
+    animate_timer_.start(100);
 }
 
 void MainWindow::B_to_C()
@@ -335,10 +353,40 @@ void MainWindow::B_to_C()
 
 void MainWindow::C_to_A()
 {
+    disable_moves(true);
 
+    disk_to_move_ = peg_C_.back();
+    x_left_ = -340;
+    y_left_ = 230 - disk_to_move_->get_height()*peg_A_.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
+
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+
+    // Setting new coordiantes for disk object.
+    change_coords('B', 'C');
+
+    peg_C_.pop_back();
+    peg_A_.push_back(disk_to_move_);
+
+    animate_timer_.start(100);
 }
 
 void MainWindow::C_to_B()
 {
+    disable_moves(true);
 
+    disk_to_move_ = peg_C_.back();
+    x_left_ = -170;
+    y_left_ = 230 - disk_to_move_->get_height()*peg_B_.size();
+    rise_left_ = disk_to_move_->get_y() - 10;
+
+    qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
+
+    // Setting new coordiantes for disk object.
+    change_coords('B', 'C');
+
+    peg_C_.pop_back();
+    peg_B_.push_back(disk_to_move_);
+
+    animate_timer_.start(100);
 }
