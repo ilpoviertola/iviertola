@@ -5,7 +5,9 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui_(new Ui::MainWindow)
+    ui_(new Ui::MainWindow), peg_A_({}), peg_B_({}), peg_C_({}),
+    disk_to_move_(nullptr), x_left_(0), y_left_(0), rise_left_(0),
+    secs_(0), moves_(0)
 {
     ui_->setupUi(this);
 
@@ -29,6 +31,7 @@ MainWindow::MainWindow(QWidget *parent) :
     setup_gameboard();
 
     connect(&animate_timer_, &QTimer::timeout, this, &MainWindow::start_animation);
+    connect(&clock_timer_, &QTimer::timeout, this, &MainWindow::time_elapsed);
     connect(ui_->newGameButton, SIGNAL(clicked(bool)), this, SLOT(new_game()));
     connect(ui_->AtoBbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_B()));
     connect(ui_->AtoCbutton, SIGNAL(clicked(bool)), this, SLOT(A_to_C()));
@@ -36,6 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui_->BtoCbutton, SIGNAL(clicked(bool)), this, SLOT(B_to_C()));
     connect(ui_->CtoAbutton, SIGNAL(clicked(bool)), this, SLOT(C_to_A()));
     connect(ui_->CtoBbutton, SIGNAL(clicked(bool)), this, SLOT(C_to_B()));
+
+
+    // Start the timer in ui immediately.
+    clock_timer_.start(1000);
 }
 
 MainWindow::~MainWindow()
@@ -94,9 +101,15 @@ void MainWindow::setup_gameboard()
 
 void MainWindow::new_game()
 {
+    clock_timer_.stop();
+    ui_->timeLCD->display(0);
+    ui_->movesLCD->display(0);
     scene_->clear();
     ui_->textBrowser->clear();
     enable_moves();
+
+    secs_ = 0;
+    moves_ = 0;
 
     for( Disk* disk : peg_A_ ){
         delete disk;
@@ -104,11 +117,13 @@ void MainWindow::new_game()
     }
     peg_A_.clear();
 
+
     for( Disk* disk : peg_B_ ){
         delete disk;
         disk = nullptr;
     }
     peg_B_.clear();
+
 
     for( Disk* disk : peg_C_ ){
         delete disk;
@@ -116,6 +131,8 @@ void MainWindow::new_game()
     }
     peg_C_.clear();
 
+
+    clock_timer_.start(1000);
     setup_gameboard();
 }
 
@@ -296,7 +313,6 @@ void MainWindow::move_disk(char from, char to)
     rise_left_ = disk_to_move_->get_y() - 10;
 
     qDebug() << "ORIGINAL:" << disk_to_move_->get_x() << " " << disk_to_move_->get_y();
-
     // Setting new coordiantes and peg for disk object.
     if(move_to_peg.size() == 0){
         int distance_between_new_and_old_y = 240 - disk_to_move_->get_y();
@@ -313,22 +329,26 @@ void MainWindow::move_disk(char from, char to)
     else if(old_peg_number == 1){peg_B_.pop_back();}
     else{peg_C_.pop_back();}
 
-    // new_peg_number tell to which peg to add new disk to the top.
+    // new_peg_number tells to which peg to add new disk on the top.
     if(new_peg_number == 0){peg_A_.push_back(disk_to_move_);}
     else if(new_peg_number == 1){peg_B_.push_back(disk_to_move_);}
     else{peg_C_.push_back(disk_to_move_);}
 
-    // Just in case.
     move_to_peg.clear();
+    ++moves_;
+    ui_->movesLCD->display(moves_);
 
     // Start animation.
-    animate_timer_.start(100);
+    animate_timer_.start(50);
 }
 
 bool MainWindow::has_won()
 {
     if(peg_B_.size() == DISK_AMOUNT|| peg_C_.size() == DISK_AMOUNT){
+        clock_timer_.stop();
         ui_->textBrowser->append(QString::fromStdString("You won! Let's play another one."));
+        ui_->textBrowser->append(QString::fromStdString("Your time was " + std::to_string(secs_)) + " seconds");
+        ui_->textBrowser->append(QString::fromStdString("and you made " + std::to_string(moves_)) + " moves.");
         disable_moves(true);
         ui_->newGameButton->setEnabled(true);
         return true;
@@ -337,7 +357,7 @@ bool MainWindow::has_won()
 
 void MainWindow::A_to_B()
 {
-      move_disk('A', 'B');
+    move_disk('A', 'B');
 }
 
 void MainWindow::A_to_C()
@@ -363,4 +383,11 @@ void MainWindow::C_to_A()
 void MainWindow::C_to_B()
 {
     move_disk('C', 'B');
+}
+
+void MainWindow::time_elapsed()
+{
+    ++secs_;
+    ui_->timeLCD->display(secs_);
+
 }

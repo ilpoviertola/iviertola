@@ -4,6 +4,11 @@ Disk::Disk(QGraphicsRectItem *disk, int width, int height, int x, int y):
     disk_(disk), width_(width), height_(height), x_(x), y_(y), peg_(0)
 {}
 
+Disk::~Disk()
+{
+
+}
+
 QGraphicsRectItem* Disk::get_disk()
 {
     return disk_;
