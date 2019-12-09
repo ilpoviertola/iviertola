@@ -1,3 +1,17 @@
+/* Source file for disk module.
+ *
+ * Contains the functions to change or get the data stored in the Disk.
+ *
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
+ *
+ * ---------------
+ * TIE-02201 S2019
+ * */
 #include "disk.hh"
 
 Disk::Disk(QGraphicsRectItem *disk, int width, int height, int x, int y):

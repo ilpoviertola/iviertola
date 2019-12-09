@@ -1,3 +1,17 @@
+/* Module: Disk
+ * ----------------
+ * Represents a single disk used in the game.
+ *
+ * Program author
+ * Name: Ilpo Viertola
+ * Student number: 272634
+ * UserID: viertoli ( Necessary due to gitlab folder naming. )
+ * E-Mail: ilpo.viertola@tuni.fi
+ *
+ *
+ * ---------------
+ * TIE-02201 S2019
+ * */
 #ifndef DISK_HH
 #define DISK_HH
 
