@@ -2,17 +2,17 @@ TOMER OF HANOI - INSTRUCTIONS
 
 GAME MADE BY - ILPO VIERTOLA (272 634)
 
-In this game you must move all the disks from the starting peg (A) to an another peg (B or C).
+In this game you must move all the disks from the starting peg (A) to a goal peg (C). You can use peg B as a temporary peg for the disks during the game. 
 Bigger disk should never be on the top of the smaller one.
 In fact, the game won't even let you to do these illegal moves. 
-Try to do this with as small amount of moves as possible.  
+Try to achieve this with as small amount of moves as possible.  
 
 TIMER STARTS TO GO IMMEDIATELY SO BE QUICK!!
 
 You can move the disks with push buttons. Buttons' text tells user from which to where the disk is moved. 
-Button only moves the top one in the selected peg! 
+Button only moves the top disk in the selected peg! 
 
-You can move dsks also with keyboard input. For example: click first a and then b -> top disk from peg A moves to peg B if it's allowed by the rules of the game. 
+You can move disks also with keyboard input. For example: click first a and then b -> top disk from peg A moves to peg B if it's allowed by the rules of the game. 
 
 Pegs' letters read on top of them.
 

@@ -40,7 +40,7 @@ public:
     // Constructor.
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void keyPressEvent(QKeyEvent* event) override;
+
     // Setups the gameboard with wanted amount of disks.
     void setup_gameboard();
 
@@ -60,6 +60,9 @@ public:
 
     // Function checks after moving the disk that has the user won the game.
     bool has_won();
+
+    // Receives user given keyboard input.
+    void keyPressEvent(QKeyEvent* event) override;
 
 private slots:
     // Slot for the timer in the ui.

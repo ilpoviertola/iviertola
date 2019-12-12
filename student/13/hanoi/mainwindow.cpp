@@ -16,10 +16,8 @@
 #include "ui_mainwindow.h"
 
 #include <QDebug>
-#include <math.h>
 #include <QKeyEvent>
-#include <thread>
-#include <chrono>
+#include <math.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -332,7 +330,11 @@ std::pair<std::vector<Disk*>, int> MainWindow::get_peg_data(char from, char to)
 
 void MainWindow::move_disk(char from, char to)
 {
+    // Information to move the disk.
     std::pair<std::vector<Disk*>, int> peg_data = get_peg_data(from, to);
+
+    // Zeroing the keyboard input.
+    previous_event_ = -1;
 
     // Acceptable move.
     if(peg_data.second != -1){
@@ -357,7 +359,7 @@ void MainWindow::move_disk(char from, char to)
             disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
         } else {
             int distance_between_new_and_old_y =
-                    move_to_peg.back()->get_y() - disk_to_move_->get_y() - 10;
+                    move_to_peg.back()->get_y() - disk_to_move_->get_y() - disk_to_move_->get_height();
             disk_to_move_->change_peg(new_peg_number);
             disk_to_move_->new_coords(x_left_, distance_between_new_and_old_y);
         }
@@ -466,7 +468,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if(event->key() == Qt::Key_B && ui_->AtoBbutton->isEnabled()){
                 move_disk('A', 'B');
             }
-            else if(event->key() == Qt::Key_C  && ui_->AtoCbutton->isEnabled()){
+            else if(event->key() == Qt::Key_C && ui_->AtoCbutton->isEnabled()){
                 move_disk('A', 'C');
             }
         }
@@ -474,7 +476,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if(event->key() == Qt::Key_A && ui_->BtoAbutton->isEnabled()){
                 move_disk('B', 'A');
             }
-            else if(event->key() == Qt::Key_C  && ui_->BtoCbutton->isEnabled()){
+            else if(event->key() == Qt::Key_C && ui_->BtoCbutton->isEnabled()){
                 move_disk('B', 'C');
             }
         }
@@ -482,7 +484,7 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
             if(event->key() == Qt::Key_A  && ui_->CtoAbutton->isEnabled()){
                 move_disk('C', 'A');
             }
-            else if(event->key() == Qt::Key_B  && ui_->CtoBbutton->isEnabled()){
+            else if(event->key() == Qt::Key_B && ui_->CtoBbutton->isEnabled()){
                 move_disk('C', 'B');
             }
         }
@@ -490,4 +492,3 @@ void MainWindow::keyPressEvent(QKeyEvent *event)
         previous_event_ = -1;
     }
 }
-
