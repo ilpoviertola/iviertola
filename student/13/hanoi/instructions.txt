@@ -12,7 +12,7 @@ TIMER STARTS TO GO IMMEDIATELY SO BE QUICK!!
 You can move the disks with push buttons. Buttons' text tells user from which to where the disk is moved. 
 Button only moves the top disk in the selected peg! 
 
-You can move disks also with keyboard input. For example: click first a and then b -> top disk from peg A moves to peg B if it's allowed by the rules of the game. 
+You can move disks also with keyboard input. For example: on your keyboard, click first a and then b -> top disk from peg A moves to peg B if it's allowed by the rules of the game. 
 
 Pegs' letters read on top of them.
 

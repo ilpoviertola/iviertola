@@ -388,7 +388,7 @@ void MainWindow::move_disk(char from, char to)
 
 bool MainWindow::has_won()
 {
-    if(peg_B_.size() == DISK_AMOUNT || peg_C_.size() == DISK_AMOUNT){
+    if(peg_C_.size() == DISK_AMOUNT){
         int fastest_time = 0;
 
         clock_timer_.stop();
