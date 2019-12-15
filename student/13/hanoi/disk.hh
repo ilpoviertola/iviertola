@@ -1,4 +1,4 @@
-/* Module: Disk
+/* Class: Disk
  * ----------------
  * Represents a single disk used in the game.
  *
@@ -23,15 +23,16 @@ class Disk
 public:
     // Constructor.
     Disk(QGraphicsRectItem* disk, int width, int height, int x, int y);
+    // Destructor.
     ~Disk();
 
     // Getters.
-    QGraphicsRectItem* get_disk();
-    int get_peg();
-    int get_width();
-    int get_height();
-    int get_x();
-    int get_y();
+    QGraphicsRectItem* get_disk() const;
+    int get_peg() const;
+    int get_width() const;
+    int get_height() const;
+    int get_x() const;
+    int get_y() const;
 
     // Changes the peg when disk is moved. A=0, B=1 and C=2.
     void change_peg(int peg);

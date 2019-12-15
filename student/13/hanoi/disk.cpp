@@ -1,4 +1,4 @@
-/* Source file for disk module.
+/* Source file for disk class.
  *
  * Contains the functions to change or get the data stored in the Disk.
  *
@@ -23,32 +23,32 @@ Disk::~Disk()
 
 }
 
-QGraphicsRectItem* Disk::get_disk()
+QGraphicsRectItem* Disk::get_disk() const
 {
     return disk_;
 }
 
-int Disk::get_peg()
+int Disk::get_peg() const
 {
     return peg_;
 }
 
-int Disk::get_width()
+int Disk::get_width() const
 {
     return width_;
 }
 
-int Disk::get_height()
+int Disk::get_height() const
 {
     return height_;
 }
 
-int Disk::get_y()
+int Disk::get_y() const
 {
     return y_;
 }
 
-int Disk::get_x()
+int Disk::get_x() const
 {
     return x_;
 }
